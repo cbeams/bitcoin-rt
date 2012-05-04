@@ -69,6 +69,9 @@ function doUnsubscribe(connection) {
 
 wsClient.on('connect', function (connection) {
     console.log('connected to mtgox');
+    console.log('unsubscribing from ticker and depth channels');
+    connection.send('{"op":"unsubscribe","channel":"d5f06780-30a8-4a48-a2f8-7ed181b4a13f"}');
+    connection.send('{"op":"unsubscribe","channel":"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe"}');
 
     connection.on('message', function (message) {
         if (message.type === 'utf8') {
@@ -76,6 +79,10 @@ wsClient.on('connect', function (connection) {
                 subscriber.send(message.utf8Data);
             });
         }
+    });
+
+    connection.on('error', function (error) {
+        console.log(error);
     });
 });
 
