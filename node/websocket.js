@@ -1,42 +1,66 @@
-var WebSocketServer = require('websocket').server;
+var MTGOX_WS_URL = 'ws://websocket.mtgox.com:80/mtgox'
+
 var http = require('http');
 
-var server = http.createServer(function(request, response) { });
-server.listen(1337, function() { });
-
-var subscribers = [];
-
-wsServer = new WebSocketServer({ httpServer: server });
-
-wsServer.on('request', function(request) {
-    var connection = request.accept(null, request.origin);
-
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            msg = JSON.parse(message.utf8Data);
-            if (msg.op === 'subscribe') {
-                subscribers.push(connection);
-            }
-            else if (msg.op === 'unsubscribe') {
-                var index = subscribers.indexOf(connection);
-                if (index >= 0) {
-                    subscribers.splice(index, 1);
-                }
-            }
-        }
-    });
-
-    connection.on('close', function(connection) {
-    });
+var server = http.createServer(function (req, res) {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('Hello World\n');
 });
 
+var WebSocketServer = require('websocket').server;
+wsServer = new WebSocketServer({ httpServer: server });
 
 var WebSocketClient = require('websocket').client;
 wsClient = new WebSocketClient();
 
-wsClient.connect("ws://websocket.mtgox.com:80/mtgox");
-wsClient.on('connect', function(connection) {
-    connection.on('message', function(message) {
+var subscribers = [];
+
+wsServer.on('request', function (request) {
+    var connection = request.accept(null, request.origin);
+
+    connection.on('message', function (message) {
+        if (message.type === 'utf8') {
+            msg = JSON.parse(message.utf8Data);
+            if (msg.op === 'subscribe') {
+                console.log('received subscribe operation');
+                if (subscribers.length == 0) {
+                    wsClient.connect(MTGOX_WS_URL);
+                }
+                subscribers.push(connection);
+            }
+            else if (msg.op === 'unsubscribe') {
+                doUnsubscribe(connection);
+            }
+        }
+    });
+
+    connection.on('close', function (connection) {
+        var unsubscribe = subscribers.filter(function (subscriber) {
+            return subscriber.connected == false
+        });
+        unsubscribe.forEach(function (subscriber) {
+            doUnsubscribe(subscriber);
+        });
+    });
+});
+
+function doUnsubscribe(connection) {
+    var index = subscribers.indexOf(connection);
+    if (index >= 0) {
+        subscriber = subscribers.splice(index, 1);
+        if (subscribers.length == 0) {
+            console.log('no more subscribers! disconnecting from mtgox.');
+            wsClient.socket.end();
+        }
+    }
+}
+
+
+wsClient.on('connect', function (connection) {
+    console.log('connected to mtgox');
+
+    connection.on('message', function (message) {
+        console.log('got message');
         if (message.type === 'utf8') {
             subscribers.forEach(function (subscriber) {
                 subscriber.send(message.utf8Data);
@@ -44,3 +68,9 @@ wsClient.on('connect', function(connection) {
         }
     });
 });
+
+wsClient.on('close', function (connection) {
+    console.log('disconnected by server from mtgox');
+});
+
+server.listen(1337, function () { });

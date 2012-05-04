@@ -12,12 +12,13 @@
 
         // Listen for messages
         socket.onmessage = function(event) {
+            document.getElementById('status').innerHTML = 'status: recieving'
             document.getElementById('data').innerHTML += event.data + '<br/>'
         };
 
         // Listen for socket closes
         socket.onclose = function(event) {
-            console.log('Client notified socket has closed',event);
+            document.getElementById('status').innerHTML = 'status: connection dropped by remote host.'
         };
 
         // To close the socket....
@@ -27,10 +28,12 @@
 
     function subscribe() {
         socket.send('{"op":"subscribe"}');
+        document.getElementById('status').innerHTML = 'status: subscription request sent. waiting.'
     }
 
     function unsubscribe() {
         socket.send('{"op":"unsubscribe"}');
+        document.getElementById('status').innerHTML = 'status: idle. click subscribe to recieve data.'
     }
 
     function clearData() {
@@ -41,5 +44,9 @@
 <input type="button" value="subscribe" onClick='subscribe()'/>
 <input type="button" value="unsubscribe" onClick='unsubscribe()'/>
 <input type="button" value="clear" onClick='clearData()'/>
-<div id="data">
-<div>
+<hr/>
+<div id="status">
+status: idle. click subscribe to recieve data.
+</div>
+<hr/>
+<div id="data"/>
