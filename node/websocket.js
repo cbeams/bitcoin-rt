@@ -1,5 +1,4 @@
 var WebSocketServer = require('websocket').server;
-var WebSocketClient = require('websocket').client;
 var http = require('http');
 
 var server = http.createServer(function(request, response) { });
@@ -31,6 +30,8 @@ wsServer.on('request', function(request) {
     });
 });
 
+
+var WebSocketClient = require('websocket').client;
 wsClient = new WebSocketClient();
 
 wsClient.connect("ws://websocket.mtgox.com:80/mtgox");
