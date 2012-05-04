@@ -1,0 +1,45 @@
+<DOCTYPE html>
+<meta charset="UTF-8"/>
+<title>test</title>
+<script language="javascript">
+    // Create a socket instance
+    //var socket = new WebSocket('ws://localhost:8081/bitcoin-rt/');
+    var socket = new WebSocket('ws://localhost:1337');
+    //var socket = new WebSocket('ws://websocket.mtgox.com/mtgox');
+
+    // Open the socket
+    socket.onopen = function(event) {
+
+        // Listen for messages
+        socket.onmessage = function(event) {
+            document.getElementById('data').innerHTML += event.data + '<br/>'
+        };
+
+        // Listen for socket closes
+        socket.onclose = function(event) {
+            console.log('Client notified socket has closed',event);
+        };
+
+        // To close the socket....
+        //socket.close()
+
+    };
+
+    function subscribe() {
+        socket.send('{"op":"subscribe"}');
+    }
+
+    function unsubscribe() {
+        socket.send('{"op":"unsubscribe"}');
+    }
+
+    function clearData() {
+        document.getElementById('data').innerHTML = ''
+    }
+</script>
+
+<input type="button" value="subscribe" onClick='subscribe()'/>
+<input type="button" value="unsubscribe" onClick='unsubscribe()'/>
+<input type="button" value="clear" onClick='clearData()'/>
+<div id="data">
+<div>
