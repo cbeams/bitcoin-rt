@@ -1,4 +1,8 @@
+// https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1
+// https://en.bitcoin.it/wiki/MtGox/API/Streaming
+
 var MTGOX_WS_URL = 'ws://websocket.mtgox.com:80/mtgox'
+var MTGOX_TRADES_CHANNEL = 'dbf1dee9-4f2e-4a08-8cb7-748919a71b21'
 
 var fs = require('fs');
 
@@ -75,9 +79,25 @@ wsClient.on('connect', function (connection) {
 
     connection.on('message', function (message) {
         if (message.type === 'utf8') {
-            subscribers.forEach(function (subscriber) {
-                subscriber.send(message.utf8Data);
+            console.log(message.utf8Data);
+            var m = JSON.parse(message.utf8Data);
+            if (m.channel != MTGOX_TRADES_CHANNEL || !m.trade.primary) {
+                return;
+            }
+            var t = m.trade;
+            var trade = JSON.stringify({
+                "type"           : "trade",
+                "exchange"       : "mtgox" + t.price_currency,
+                "date"           : t.date,
+                "btc_amount"     : t.amount,
+                "price"          : t.price,
+                "price_currency" : t.price_currency,
+                "tid"            : t.tid
             });
+            subscribers.forEach(function (subscriber) {
+                subscriber.send(trade);
+            });
+
         }
     });
 
