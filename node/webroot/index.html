@@ -97,7 +97,7 @@ function redraw() {
 
   circle.enter().append("circle")
       .style("stroke", "gray")
-      .style("fill", "white")
+      .style("fill", "red")
       .attr("cx", function(d, i) { return x(d.date) })
       .attr("cy", function(d, i) { return y(d.btc_amount) })
       .attr("r", 0)
