@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <style type="text/css">
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+.x.axis line {
+  shape-rendering: auto;
+}
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+var n = 243,
+    duration = 750,
+    now = new Date(Date.now() - duration);
+
+var margin = {top: 6, right: 0, bottom: 20, left: 40},
+    width = 960 - margin.right,
+    height = 200 - margin.top - margin.bottom;
+
+var x = d3.time.scale()
+    .domain([now - (n - 2) * duration, now - duration])
+    .range([0, width]);
+
+var y = d3.scale.log()
+    .domain([0.01, 10000])
+    .range([height, 0]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", 1020)
+    .attr("height", 200)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var timeline = svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(x.axis = d3.svg.axis().scale(x).orient("bottom"));
+
+var amount = svg.append("g")
+    .attr("class", "y axis")
+    .call(y.axis = d3.svg.axis().scale(y).orient("left"));
+
+var trades = [];
+
+redraw();
+
+var socket = new WebSocket('ws://localhost:1337');
+
+socket.onopen = function(event) {
+    socket.send('{"op":"subscribe"}');
+};
+
+socket.onmessage = function(event) {
+    trade = JSON.parse(event.data);
+    trades.push(trade);
+};
+
+socket.onerror = function(event) {
+    console.log("A WebSocket error occured");
+    console.log(event);
+};
+
+socket.onclose = function(event) {
+    console.log("Remote host closed or refused WebSocket connection");
+    console.log(event);
+};
+
+
+function redraw() {
+
+  //var trade = { "date": now-174000, "btc_amount": Math.random()*10 };
+
+  // remove trades as they approach the origin of the x axis
+  while (trades.length > 0 && x(trades[0].date-duration) < 0) {
+    trades.shift();
+  }
+
+  // join trade data to points on the graph
+  // see http://bost.ocks.org/mike/join
+  var circle = svg.selectAll("circle")
+      .data(trades, function(d, i) { return d.date });
+
+  circle.enter().append("circle")
+      .style("stroke", "gray")
+      .style("fill", "white")
+      .attr("cx", function(d, i) { return x(d.date) })
+      .attr("cy", function(d, i) { return y(d.btc_amount) })
+      .attr("r", 0)
+    .transition()
+      .duration(duration)
+      .attr("r", 5);
+
+  circle.transition()
+      .duration(duration)
+      .ease("linear")
+      .attr("cx", function(d) { return x(d.date) });
+
+  circle.exit().transition()
+      .duration(duration)
+      .attr("r", 0)
+      .ease("linear")
+      .attr("cx", function(d) { return x(d.date) })
+      .remove();
+
+  // update the timeline domain
+  now = new Date();
+  x.domain([now - (n - 2) * duration, now - duration]);
+
+  // slide the x-axis left
+  timeline.transition()
+      .duration(duration)
+      .ease("linear")
+      .call(x.axis)
+      .each("end", redraw);
+}
+    </script>
+</body>

@@ -1,4 +1,5 @@
 ```
 $ npm install websockets
-$ node websocket.js
+$ node bitcoind.js
+$ open http://localhost:1337
 ```

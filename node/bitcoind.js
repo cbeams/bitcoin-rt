@@ -5,21 +5,45 @@ var MTGOX_WS_URL = 'ws://websocket.mtgox.com:80/mtgox'
 var MTGOX_TRADES_CHANNEL = 'dbf1dee9-4f2e-4a08-8cb7-748919a71b21'
 
 var fs = require('fs');
-
+var path = require('path');
 var http = require('http');
+
 var server = http.createServer(function (req, res) {
-    if (req.url === '/') {
-        fs.readFile('index.html', 'utf8', function (err, data) {
+    var p = req.url;
+
+    if (p === '/') {
+        p = '/index.html'
+    }
+
+    p = 'webroot' + p;
+
+    var contentType;
+    if (p.match('\.html$')) {
+        contentType = 'text/html';
+    }
+    else if (p.match('\.js$')) {
+        contentType = 'application/javascript';
+    }
+    else {
+        contentType = 'application/unknown';
+    }
+
+    path.exists(p, function(exists) {
+        if (!exists) {
+            res.writeHead(404);
+            res.end();
+            return;
+        }
+        fs.readFile(p, 'utf8', function (err, data) {
             if (err) {
                 res.writeHead(500);
-                res.end();
+                res.end(JSON.stringify(err));
                 return console.log(err);
             }
-
-            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.writeHead(200, { 'Content-Type': contentType });
             res.end(data);
         });
-    }
+    });
 });
 
 var WebSocketServer = require('websocket').server;
@@ -42,6 +66,7 @@ wsServer.on('request', function (request) {
                     wsClient.connect(MTGOX_WS_URL);
                 }
                 subscribers.push(connection);
+                sendTestTrades(connection);
             }
             else if (msg.op === 'unsubscribe') {
                 doUnsubscribe(connection);
@@ -65,7 +90,9 @@ function doUnsubscribe(connection) {
         subscriber = subscribers.splice(index, 1);
         if (subscribers.length == 0) {
             console.log('no more subscribers! disconnecting from mtgox.');
-            wsClient.socket.end();
+            if (wsClient.socket != null) {
+                wsClient.socket.end();
+            }
         }
     }
 }
@@ -88,7 +115,7 @@ wsClient.on('connect', function (connection) {
             var trade = JSON.stringify({
                 "type"           : "trade",
                 "exchange"       : "mtgox" + t.price_currency,
-                "date"           : t.date,
+                "date"           : t.date * 1000, // for easy ms dates in js
                 "btc_amount"     : t.amount,
                 "price"          : t.price,
                 "price_currency" : t.price_currency,
@@ -109,5 +136,33 @@ wsClient.on('connect', function (connection) {
 wsClient.on('close', function (connection) {
     console.log('disconnected by server from mtgox');
 });
+
+
+function sendTestTrades(connection) {
+    // for dev purposes: seed a few trades for display
+    var now = Date.now();
+    connection.send(
+        JSON.stringify({
+            "type"           : "trade",
+            "exchange"       : "mtgoxUSD",
+            "date"           : now-2000,
+            "btc_amount"     : 3,
+            "price"          : 5,
+            "price_currency" : "USD",
+            "tid"            : 9876543210
+        })
+    );
+    connection.send(
+        JSON.stringify({
+            "type"           : "trade",
+            "exchange"       : "mtgoxUSD",
+            "date"           : now-1000,
+            "btc_amount"     : 30,
+            "price"          : 5,
+            "price_currency" : "USD",
+            "tid"            : 9876543211
+        })
+    );
+}
 
 server.listen(1337, function () { });
