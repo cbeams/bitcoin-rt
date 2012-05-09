@@ -53,6 +53,7 @@ var WebSocketClient = require('websocket').client;
 wsClient = new WebSocketClient();
 
 var subscribers = [];
+var txno = 0;
 
 wsServer.on('request', function (request) {
     var connection = request.accept(null, request.origin);
@@ -119,7 +120,8 @@ wsClient.on('connect', function (connection) {
                 "btc_amount"     : t.amount,
                 "price"          : t.price,
                 "price_currency" : t.price_currency,
-                "tid"            : t.tid
+                "txid"           : t.tid,
+                "txno"           : ++txno
             });
             subscribers.forEach(function (subscriber) {
                 subscriber.send(trade);
@@ -149,7 +151,8 @@ function sendTestTrades(connection) {
             "btc_amount"     : 3,
             "price"          : 5,
             "price_currency" : "USD",
-            "tid"            : 9876543210
+            "txid"           : 9876543210,
+            "txno"           : ++txno
         })
     );
     connection.send(
@@ -160,7 +163,20 @@ function sendTestTrades(connection) {
             "btc_amount"     : 30,
             "price"          : 5,
             "price_currency" : "USD",
-            "tid"            : 9876543211
+            "txid"           : 9876543211,
+            "txno"           : ++txno
+        })
+    );
+    connection.send(
+        JSON.stringify({
+            "type"           : "trade",
+            "exchange"       : "mtgoxUSD",
+            "date"           : now,
+            "btc_amount"     : 300,
+            "price"          : 5,
+            "price_currency" : "USD",
+            "txid"           : 9876543211,
+            "txno"           : ++txno
         })
     );
 }

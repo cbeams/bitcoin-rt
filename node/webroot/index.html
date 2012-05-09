@@ -93,7 +93,7 @@ function redraw() {
   // join trade data to points on the graph
   // see http://bost.ocks.org/mike/join
   var circle = svg.selectAll("circle")
-      .data(trades, function(d, i) { return d.date });
+      .data(trades, function(d, i) { return d.txno });
 
   circle.enter().append("circle")
       .style("stroke", "gray")
