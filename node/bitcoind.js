@@ -7,6 +7,9 @@ var MTGOX_TRADES_CHANNEL = 'dbf1dee9-4f2e-4a08-8cb7-748919a71b21'
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
+var mongo = require('mongodb'),
+    server = new mongo.Server('localhost', 27017, {auto_reconnect: true}),
+    db = new mongo.Db('bitcoin', server);
 
 var server = http.createServer(function (req, res) {
     var p = req.url;
@@ -53,7 +56,6 @@ var WebSocketClient = require('websocket').client;
 wsClient = new WebSocketClient();
 
 var subscribers = [];
-var txno = 0;
 
 wsServer.on('request', function (request) {
     var connection = request.accept(null, request.origin);
@@ -67,7 +69,7 @@ wsServer.on('request', function (request) {
                     wsClient.connect(MTGOX_WS_URL);
                 }
                 subscribers.push(connection);
-                sendTestTrades(connection);
+                //sendTestTrades(connection);
             }
             else if (msg.op === 'unsubscribe') {
                 doUnsubscribe(connection);
@@ -113,18 +115,21 @@ wsClient.on('connect', function (connection) {
                 return;
             }
             var t = m.trade;
-            var trade = JSON.stringify({
+            var trade = {
                 "type"           : "trade",
                 "exchange"       : "mtgox" + t.price_currency,
                 "date"           : t.date * 1000, // for easy ms dates in js
                 "btc_amount"     : t.amount,
                 "price"          : t.price,
                 "price_currency" : t.price_currency,
-                "txid"           : t.tid,
-                "txno"           : ++txno
-            });
-            subscribers.forEach(function (subscriber) {
-                subscriber.send(trade);
+                "txid"           : t.tid
+            };
+            db.collection('trades', function(err, collection) {
+                collection.insert(trade, {safe:true}, function(err, result) {
+                    subscribers.forEach(function (subscriber) {
+                        subscriber.send(JSON.stringify(result[0]));
+                    });
+                });
             });
 
         }
@@ -151,8 +156,7 @@ function sendTestTrades(connection) {
             "btc_amount"     : 3,
             "price"          : 5,
             "price_currency" : "USD",
-            "txid"           : 9876543210,
-            "txno"           : ++txno
+            "txid"           : 9876543210
         })
     );
     connection.send(
@@ -163,8 +167,7 @@ function sendTestTrades(connection) {
             "btc_amount"     : 30,
             "price"          : 5,
             "price_currency" : "USD",
-            "txid"           : 9876543211,
-            "txno"           : ++txno
+            "txid"           : 9876543211
         })
     );
     connection.send(
@@ -175,8 +178,7 @@ function sendTestTrades(connection) {
             "btc_amount"     : 300,
             "price"          : 5,
             "price_currency" : "USD",
-            "txid"           : 9876543211,
-            "txno"           : ++txno
+            "txid"           : 9876543211
         })
     );
 }
