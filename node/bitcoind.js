@@ -76,7 +76,15 @@ wsServer.on('request', function (request) {
                     wsClient.connect(MTGOX_WS_URL);
                 }
                 subscribers.push(connection);
+
                 //sendTestTrades(connection);
+
+                db.collection('trades', function(err, collection) {
+                  var stream = collection.find({}).streamRecords();
+                  stream.on('data', function(trade) {
+                      connection.send(JSON.stringify(trade));
+                  });
+                });
             }
             else if (msg.op === 'unsubscribe') {
                 doUnsubscribe(connection);
