@@ -1,24 +1,29 @@
-// https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1
-// https://en.bitcoin.it/wiki/MtGox/API/Streaming
+var MTGOX_WS_URL = 'ws://websocket.mtgox.com:80/mtgox',
+    MTGOX_TRADES_CHANNEL = 'dbf1dee9-4f2e-4a08-8cb7-748919a71b21',
+    MTGOX_TICKER_CHANNEL = 'd5f06780-30a8-4a48-a2f8-7ed181b4a13f',
+    MTGOX_DEPTH_CHANNEL = '24e67e0d-1cad-4cc0-9e7a-f8523ef460fe';
 
-var MTGOX_WS_URL = 'ws://websocket.mtgox.com:80/mtgox'
-var MTGOX_TRADES_CHANNEL = 'dbf1dee9-4f2e-4a08-8cb7-748919a71b21'
+var MONGO_TRADES_COLL = 'trades';
 
-var fs = require('fs');
-var path = require('path');
-var http = require('http');
-var mongo = require('mongodb'),
-    server = new mongo.Server('localhost', 27017, {auto_reconnect: true}),
-    db = new mongo.Db('bitcoin', server);
+var fs = require('fs'),
+    path = require('path'),
+    http = require('http'),
+    mongo = require('mongodb'),
+    WebSocketServer = require('websocket').server,
+    WebSocketClient = require('websocket').client;
+
+
+// connect and ensure mongo is up
+var db = new mongo.Db('bitcoin',
+        new mongo.Server('localhost', 27017, {auto_reconnect: true}));
 
 db.open(function(err, db) {
-  if(err) {
-      console.log('Could not connect to MongoDB! Is the server running?');
-      throw err;
-  }
+    if(err) { throw err; }
 });
 
-var server = http.createServer(function (req, res) {
+
+// serve html and js resources
+var httpServer = http.createServer(function (req, res) {
     var p = req.url;
 
     if (p === '/') {
@@ -54,121 +59,107 @@ var server = http.createServer(function (req, res) {
             res.end(data);
         });
     });
-});
+}).listen(1337, function () { });
 
-var WebSocketServer = require('websocket').server,
-    wsServer = new WebSocketServer({ httpServer: server });
 
-var WebSocketClient = require('websocket').client,
-    wsClient = new WebSocketClient();
+// holder for client (browser) websocket connections
+var clients = [];
 
-wsClient.connect(MTGOX_WS_URL);
 
-// client (browser) websocket connections
-var subscribers = [];
+// handle websocket requests
+var wsServer = new WebSocketServer({ httpServer: httpServer });
 
 wsServer.on('request', function (request) {
-    var connection = request.accept(null, request.origin);
+    var clientConn = request.accept(null, request.origin);
 
-    subscribers.push(connection);
+    clients.push(clientConn);
+    sendAllTrades(clientConn);
 
-    db.collection('trades', function(err, collection) {
-      var stream = collection.find({}).streamRecords();
-      stream.on('data', function(trade) {
-          connection.send(JSON.stringify(trade));
-      });
-    });
-
-    connection.on('close', function (subscriber) {
-        subscribers.filter(function (subscriber) {
-            return subscriber.connected == false
-        }).forEach(function (subscriber) {
-            subscribers.splice(subscribers.indexOf(subscriber), 1);
+    clientConn.on('close', function (clientConn) {
+        // eliminate references to disconnected clients to avoid memory leak
+        clients.filter(function (clientConn) {
+            return clientConn.connected == false
+        }).forEach(function (clientConn) {
+            clients.splice(clients.indexOf(clientConn), 1);
         });
     });
 });
 
 
-wsClient.on('connect', function (connection) {
-    console.log('connected to mtgox');
-    console.log('unsubscribing from ticker and depth channels');
-    connection.send('{"op":"unsubscribe","channel":"d5f06780-30a8-4a48-a2f8-7ed181b4a13f"}');
-    connection.send('{"op":"unsubscribe","channel":"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe"}');
+// retrieve trade data from the MtGox bitcoin exchange
+// see https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1
+//     https://en.bitcoin.it/wiki/MtGox/API/Streaming
+var mtgoxConn = new WebSocketClient();
 
-    connection.on('message', function (message) {
-        if (message.type === 'utf8') {
-            console.log(message.utf8Data);
-            var m = JSON.parse(message.utf8Data);
-            if (m.channel != MTGOX_TRADES_CHANNEL || !m.trade.primary) {
-                return;
-            }
-            var t = m.trade;
-            var trade = {
-                "type"           : "trade",
-                "exchange"       : "mtgox" + t.price_currency,
-                "date"           : t.date * 1000, // for easy ms dates in js
-                "btc_amount"     : t.amount,
-                "price"          : t.price,
-                "price_currency" : t.price_currency,
-                "txid"           : t.tid
-            };
-            db.collection('trades', function(err, collection) {
-                collection.insert(trade, {safe:true}, function(err, result) {
-                    subscribers.forEach(function (subscriber) {
-                        subscriber.send(JSON.stringify(result[0]));
-                    });
-                });
-            });
+mtgoxConn.connect(MTGOX_WS_URL);
 
+mtgoxConn.on('connect', function (mtgoxConn) {
+    console.log('connected to mtgox, unsubscribing from ticker and depth channels');
+    mtgoxConn.send('{"op":"unsubscribe","channel":"' + MTGOX_TICKER_CHANNEL + '"}');
+    mtgoxConn.send('{"op":"unsubscribe","channel":"' + MTGOX_DEPTH_CHANNEL + '"}');
+
+    mtgoxConn.on('message', function (message) {
+        if (message.type !== 'utf8') {
+            // ignore any binary messages (should never occur from mtgox anyway)
+            return;
         }
+
+        var data = JSON.parse(message.utf8Data);
+
+        if (data.channel != MTGOX_TRADES_CHANNEL || !data.trade.primary) {
+            // ignore any non-trade messages that might slip in before our
+            // op:unsubscribes sent above have been handled; also ignore any
+            // 'non-primary' trades. see
+            // https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1#Multi_currency_trades
+            return;
+        }
+
+        // map the mtgox trade data to our more minimal structure that provides
+        // only what's necessary for client display
+        var trade = {
+            "type"           : "trade",
+            "exchange"       : "mtgox" + data.trade.price_currency,
+            "date"           : data.trade.date * 1000, // for easy ms dates in js
+            "btc_amount"     : data.trade.amount,
+            "price"          : data.trade.price,
+            "price_currency" : data.trade.price_currency,
+            "txid"           : data.trade.tid
+        };
+
+        sendNewTrade(trade);
     });
 
-    connection.on('error', function (error) {
+    mtgoxConn.on('error', function (error) {
         console.log(error);
     });
 });
 
-wsClient.on('close', function (connection) {
+mtgoxConn.on('close', function (mtgoxConn) {
     console.log('disconnected by server from mtgox');
+    // TODO: reconnect!
 });
 
 
-function sendTestTrades(connection) {
-    // for dev purposes: seed a few trades for display
-    var now = Date.now();
-    connection.send(
-        JSON.stringify({
-            "type"           : "trade",
-            "exchange"       : "mtgoxUSD",
-            "date"           : now-2000,
-            "btc_amount"     : 3,
-            "price"          : 5,
-            "price_currency" : "USD",
-            "txid"           : 9876543210
-        })
-    );
-    connection.send(
-        JSON.stringify({
-            "type"           : "trade",
-            "exchange"       : "mtgoxUSD",
-            "date"           : now-1000,
-            "btc_amount"     : 30,
-            "price"          : 5,
-            "price_currency" : "USD",
-            "txid"           : 9876543211
-        })
-    );
-    connection.send(
-        JSON.stringify({
-            "type"           : "trade",
-            "exchange"       : "mtgoxUSD",
-            "date"           : now,
-            "btc_amount"     : 300,
-            "price"          : 5,
-            "price_currency" : "USD",
-            "txid"           : 9876543211
-        })
-    );
+// send all saved trades to the client
+// TODO: limit to a date range communicated by the client
+// see http://mongodb.github.com/node-mongodb-native/api-articles/nodekoarticle1.html#time-to-query
+function sendAllTrades(clientConn) {
+    db.collection(MONGO_TRADES_COLL, function(err, collection) {
+        var stream = collection.find({}).streamRecords();
+        stream.on('data', function(trade) {
+            clientConn.send(JSON.stringify(trade));
+        });
+    });
 }
 
-server.listen(1337, function () { });
+// save trade data to mongo and send trade message to client when complete
+// see http://mongodb.github.com/node-mongodb-native/api-articles/nodekoarticle1.html#and-then-there-was-crud
+function sendNewTrade(trade) {
+    db.collection(MONGO_TRADES_COLL, function (err, collection) {
+        collection.insert(trade, function(err, result) {
+            clients.forEach(function (clientConn) {
+                clientConn.send(JSON.stringify(result[0]));
+            });
+        });
+    });
+}

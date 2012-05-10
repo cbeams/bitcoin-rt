@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
-    <script type="text/javascript" src="d3/d3.js"></script>
-    <style type="text/css">
+  <script type="text/javascript" src="d3/d3.js"></script>
+  <style type="text/css">
 .axis path,
 .axis line {
     fill: none;
@@ -20,10 +20,10 @@
   stroke: #000;
   stroke-width: 1.5px;
 }
-    </style>
+  </style>
 </head>
 <body>
-    <script type="text/javascript">
+  <script type="text/javascript">
 var n = 243,
     duration = 750,
     now = new Date(Date.now() - duration);
@@ -62,28 +62,26 @@ redraw();
 var socket = new WebSocket('ws://localhost:1337');
 
 socket.onopen = function(event) {
-    // no-op
+  // no-op
 };
 
 socket.onmessage = function(event) {
-    trade = JSON.parse(event.data);
-    trades.push(trade);
+  trade = JSON.parse(event.data);
+  trades.push(trade);
 };
 
 socket.onerror = function(event) {
-    console.log("A WebSocket error occured");
-    console.log(event);
+  console.log("A WebSocket error occured");
+  console.log(event);
 };
 
 socket.onclose = function(event) {
-    console.log("Remote host closed or refused WebSocket connection");
-    console.log(event);
+  console.log("Remote host closed or refused WebSocket connection");
+  console.log(event);
 };
 
 
 function redraw() {
-
-  //var trade = { "date": now-174000, "btc_amount": Math.random()*10 };
 
   // remove trades as they approach the origin of the x axis
   while (trades.length > 0 && x(trades[0].date-duration) < 0) {
@@ -128,5 +126,5 @@ function redraw() {
       .call(x.axis)
       .each("end", redraw);
 }
-    </script>
+  </script>
 </body>
