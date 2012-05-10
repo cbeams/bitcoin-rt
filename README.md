@@ -21,10 +21,12 @@ WebSocket support in Spring. While the implementation is Node-based at the
 moment, the goal is to implement it in Tomcat's [native WebSocket API][tomcat]
 as well as in [vert.x][], which should provide for interesting comparisons.
 
-The instructions below assume OS X with [homebrew][] installed. If you're on
-another platform, I'm sure you'll figure it out.
+Below are setup instructions for OS X (with [homebrew][] installed) and
+for Linux. If you're on another platform, you'll easily figure it out.
 
-## install and run mongodb
+## OS X Setup
+
+### install and run mongodb
 see http://www.mongodb.org/display/DOCS/Quickstart+OS+X
 ```
 brew install mongodb # (~50MB)
@@ -33,17 +35,25 @@ sudo chown `id -u` /data/db
 mongod
 ```
 
-## install npm/node
+### install npm/node
 ```
 brew install npm
 brew install node
 ```
 
+## Linux Setup
+
+### mongodb
+see http://www.mongodb.org/downloads#packages
+
+### npm/node
+see https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+
 ## run the app
 ```
 git clone git://github.com/cbeams/bitcoin-rt.git
 cd bitcoin-rt/node
-npm install websockets
+npm install websocket
 npm install mongodb
 node bitcoind.js
 open http://localhost:1337
