@@ -11,6 +11,13 @@ var mongo = require('mongodb'),
     server = new mongo.Server('localhost', 27017, {auto_reconnect: true}),
     db = new mongo.Db('bitcoin', server);
 
+db.open(function(err, db) {
+  if(err) {
+      console.log('Could not connect to MongoDB! Is the server running?');
+      throw err;
+  }
+});
+
 var server = http.createServer(function (req, res) {
     var p = req.url;
 
