@@ -62,7 +62,7 @@ redraw();
 var socket = new WebSocket('ws://localhost:1337');
 
 socket.onopen = function(event) {
-    socket.send('{"op":"subscribe"}');
+    // no-op
 };
 
 socket.onmessage = function(event) {

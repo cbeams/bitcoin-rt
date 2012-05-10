@@ -62,34 +62,22 @@ wsServer = new WebSocketServer({ httpServer: server });
 var WebSocketClient = require('websocket').client;
 wsClient = new WebSocketClient();
 
+// client (browser) websocket connections
 var subscribers = [];
 
 wsServer.on('request', function (request) {
     var connection = request.accept(null, request.origin);
 
-    connection.on('message', function (message) {
-        if (message.type === 'utf8') {
-            msg = JSON.parse(message.utf8Data);
-            if (msg.op === 'subscribe') {
-                console.log('received subscribe operation');
-                if (subscribers.length == 0) {
-                    wsClient.connect(MTGOX_WS_URL);
-                }
-                subscribers.push(connection);
+    if (subscribers.length == 0) {
+        wsClient.connect(MTGOX_WS_URL);
+    }
+    subscribers.push(connection);
 
-                //sendTestTrades(connection);
-
-                db.collection('trades', function(err, collection) {
-                  var stream = collection.find({}).streamRecords();
-                  stream.on('data', function(trade) {
-                      connection.send(JSON.stringify(trade));
-                  });
-                });
-            }
-            else if (msg.op === 'unsubscribe') {
-                doUnsubscribe(connection);
-            }
-        }
+    db.collection('trades', function(err, collection) {
+      var stream = collection.find({}).streamRecords();
+      stream.on('data', function(trade) {
+          connection.send(JSON.stringify(trade));
+      });
     });
 
     connection.on('close', function (connection) {
