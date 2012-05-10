@@ -56,11 +56,13 @@ var server = http.createServer(function (req, res) {
     });
 });
 
-var WebSocketServer = require('websocket').server;
-wsServer = new WebSocketServer({ httpServer: server });
+var WebSocketServer = require('websocket').server,
+    wsServer = new WebSocketServer({ httpServer: server });
 
-var WebSocketClient = require('websocket').client;
-wsClient = new WebSocketClient();
+var WebSocketClient = require('websocket').client,
+    wsClient = new WebSocketClient();
+
+wsClient.connect(MTGOX_WS_URL);
 
 // client (browser) websocket connections
 var subscribers = [];
@@ -68,9 +70,6 @@ var subscribers = [];
 wsServer.on('request', function (request) {
     var connection = request.accept(null, request.origin);
 
-    if (subscribers.length == 0) {
-        wsClient.connect(MTGOX_WS_URL);
-    }
     subscribers.push(connection);
 
     db.collection('trades', function(err, collection) {
@@ -80,28 +79,14 @@ wsServer.on('request', function (request) {
       });
     });
 
-    connection.on('close', function (connection) {
-        var unsubscribe = subscribers.filter(function (subscriber) {
+    connection.on('close', function (subscriber) {
+        subscribers.filter(function (subscriber) {
             return subscriber.connected == false
-        });
-        unsubscribe.forEach(function (subscriber) {
-            doUnsubscribe(subscriber);
+        }).forEach(function (subscriber) {
+            subscribers.splice(subscribers.indexOf(subscriber), 1);
         });
     });
 });
-
-function doUnsubscribe(connection) {
-    var index = subscribers.indexOf(connection);
-    if (index >= 0) {
-        subscriber = subscribers.splice(index, 1);
-        if (subscribers.length == 0) {
-            console.log('no more subscribers! disconnecting from mtgox.');
-            if (wsClient.socket != null) {
-                wsClient.socket.end();
-            }
-        }
-    }
-}
 
 
 wsClient.on('connect', function (connection) {
