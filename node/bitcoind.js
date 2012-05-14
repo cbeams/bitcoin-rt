@@ -36,6 +36,9 @@ var httpServer = http.createServer(function (req, res) {
     if (p.match('\.html$')) {
         contentType = 'text/html';
     }
+    else if (p.match('\.css$')) {
+        contentType = 'text/css';
+    }
     else if (p.match('\.js$')) {
         contentType = 'application/javascript';
     }
