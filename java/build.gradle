@@ -13,6 +13,8 @@ war.baseName = 'bitcoin-rt'
 
 dependencies {
 	compile('org.springframework:spring-web:3.1.1.RELEASE')
+	compile('com.ning:async-http-client:1.7.4')
+	compile('com.jayway.jsonpath:json-path:0.8.1')
 	providedCompile('org.apache.tomcat:tomcat-catalina:7.0.27')
 	providedCompile('org.apache.tomcat:tomcat-coyote:7.0.27')
 	providedCompile('org.apache.tomcat:tomcat-servlet-api:7.0.27')
