@@ -54,6 +54,7 @@ see https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 git clone git://github.com/cbeams/bitcoin-rt.git
 cd bitcoin-rt/node
 npm install websocket
+npm install node-static
 npm install mongodb
 node bitcoind.js
 open http://localhost:1337
