@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.bitcoinrt;
+package org.bitcoinrt.client;
 
 import java.io.IOException;
 
-public interface Broadcaster {
+public interface BitcoinMessageListener {
 
-	void broadcast(String message) throws IOException;
+	void onMessage(String message) throws IOException;
 
 }

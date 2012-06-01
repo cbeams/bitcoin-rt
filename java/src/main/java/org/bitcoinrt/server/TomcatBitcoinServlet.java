@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.bitcoinrt;
+package org.bitcoinrt.server;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -22,12 +22,12 @@ import java.nio.CharBuffer;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import javax.servlet.ServletException;
-
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
+import org.bitcoinrt.client.BitcoinMessageListener;
+import org.bitcoinrt.client.BitcointClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,21 +38,14 @@ public class TomcatBitcoinServlet extends WebSocketServlet {
 
 	private final Set<MessageInbound> connections = new CopyOnWriteArraySet<MessageInbound>();
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		try {
-			new AsyncHttpClientBitcoinClient(createBroadcaster()).connect();
-		}
-		catch (IOException ex) {
-			throw new ServletException(ex);
-		}
+	public TomcatBitcoinServlet(BitcointClient bitcointClient) {
+		bitcointClient.registerListener(createListener());
 	}
 
-	private Broadcaster createBroadcaster() throws IOException {
-		return new Broadcaster() {
+	private BitcoinMessageListener createListener() {
+		return new BitcoinMessageListener() {
 			@Override
-			public void broadcast(String message) throws IOException {
+			public void onMessage(String message) throws IOException {
 				for (MessageInbound inbound : TomcatBitcoinServlet.this.connections) {
 					inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
 				}

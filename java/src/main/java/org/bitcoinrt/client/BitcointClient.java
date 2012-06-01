@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package org.bitcoinrt;
+package org.bitcoinrt.client;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration.Dynamic;
 
-import org.springframework.web.WebApplicationInitializer;
+public interface BitcointClient {
 
-public class WebSocketServletInitializer implements WebApplicationInitializer {
+	void registerListener(BitcoinMessageListener listener);
 
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-
-		Dynamic servlet = servletContext.addServlet("ws", new TomcatBitcoinServlet());
-		servlet.addMapping("/tomcat");
-		servlet.setLoadOnStartup(1);
-	}
+	void start() throws Exception;
 
 }
