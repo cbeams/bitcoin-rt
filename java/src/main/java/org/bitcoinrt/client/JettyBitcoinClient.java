@@ -43,7 +43,6 @@ public class JettyBitcoinClient extends AbstractBitcoinClient {
 			factory.start();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new IllegalStateException(e);
 		}
 		return factory.newWebSocketClient();

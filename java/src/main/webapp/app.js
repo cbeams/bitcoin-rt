@@ -6,7 +6,7 @@
 
   	var ready = false;
   	
-    var socket = new WebSocket('ws://localhost:8080/bitcoin-rt-java/tomcat');
+    var socket = new WebSocket('ws://localhost:8080/bitcoin-rt/tomcat');
 
     socket.onopen = function(event) {
       ready = true;

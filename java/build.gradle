@@ -7,6 +7,7 @@ targetCompatibility = 1.6
 
 repositories {
 	maven { url 'http://repo.springsource.org/libs-release' }
+	mavenCentral()
 }
 
 war.baseName = 'bitcoin-rt'
@@ -18,9 +19,9 @@ dependencies {
 	compile('org.eclipse.jetty:jetty-websocket:8.1.4.v20120524')
 	compile('org.springframework:spring-web:3.1.1.RELEASE')
 
-	providedCompile('org.apache.tomcat:tomcat-catalina:7.0.27')
-	providedCompile('org.apache.tomcat:tomcat-coyote:7.0.27')
-	providedCompile('org.apache.tomcat:tomcat-servlet-api:7.0.27')
+	providedCompile('org.apache.tomcat:tomcat-catalina:7.0.29')
+	providedCompile('org.apache.tomcat:tomcat-coyote:7.0.29')
+	providedCompile('org.apache.tomcat:tomcat-servlet-api:7.0.29')
 
 	runtime('ch.qos.logback:logback-classic:1.0.1')
 	runtime('org.slf4j:jcl-over-slf4j:1.6.4')

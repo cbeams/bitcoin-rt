@@ -22,6 +22,8 @@ import java.nio.CharBuffer;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
@@ -54,7 +56,7 @@ public class TomcatBitcoinServlet extends WebSocketServlet {
 	}
 
 	@Override
-	protected StreamInbound createWebSocketInbound(String subProtocol) {
+	protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
 		return new MessageInbound() {
 			@Override
 			protected void onOpen(WsOutbound outbound) {
