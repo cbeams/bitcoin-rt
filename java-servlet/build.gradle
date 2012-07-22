@@ -10,7 +10,13 @@ repositories {
 	mavenCentral()
 }
 
-war.baseName = 'bitcoin-rt'
+eclipse {
+  project {
+    name = 'bitcoin-rt-java-servlet'
+  }
+}
+
+war.baseName = 'bitcoin-rt-java-servlet'
 
 dependencies {
 

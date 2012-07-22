@@ -2,45 +2,26 @@
 
   var trades = [];
 
-  function BitcoinWebSocket() {
+  var socket = new SockJS('/bitcoin');
 
-  	var ready = false;
-  	
-    var socket = new WebSocket('ws://localhost:8080/bitcoin-rt/tomcat');
+  socket.onopen = function(event) {
+    // no-op
+  };
 
-    socket.onopen = function(event) {
-      ready = true;
-    };
+  socket.onmessage = function(event) {
+    var trade = JSON.parse(event.data);
+    trades.push(trade);
+  };
 
-    socket.onmessage = function(event) {
-      var trade = JSON.parse(event.data);
-      trade.date = trade.date * 1000;
-      trades.push(trade);
-    };
+  socket.onerror = function(event) {
+    console.log("A WebSocket error occured");
+    console.log(event);
+  };
 
-    socket.onerror = function(event) {
-      console.log("A WebSocket error occured");
-      console.log(event);
-      ready = false;
-    };
-
-    socket.onclose = function(event) {
-      console.log("Remote host closed or refused WebSocket connection");
-      console.log(event);
-      ready = false;
-    };
-    
-    return {
-    	send : function(data) {
-    		if (ready == true) {
-    			socket.send(data);
-    		}
-    	}
-    }
-  }
- 
-  var wsSocket = BitcoinWebSocket();
-  
+  socket.onclose = function(event) {
+    console.log("Remote host closed or refused WebSocket connection");
+    console.log(event);
+  };
 
   function BitcoinChart() {
 
@@ -50,7 +31,7 @@
     var chartElement, timeScale, timeAxis, timeline, amountScale;
 
     var keepDrawing = true;
-    
+
     function init() {
       var margin = {top: 6, right: 0, bottom: 20, left: 40},
           width = 960 - margin.right,
@@ -79,10 +60,6 @@
 
     function redraw() {
 
-    	// Workaround for Tomcat not having a separate timeout value for WebSockets
-    	// See http://comments.gmane.org/gmane.comp.jakarta.tomcat.user/221280
-    	ping();
-    	
       if (!keepDrawing) {
         return;
       }
@@ -101,7 +78,7 @@
           .style("stroke", "gray")
           .style("fill", "red")
           .attr("cx", function(d, i) { return timeScale(d.date) })
-          .attr("cy", function(d, i) { return amountScale(d.amount) })
+          .attr("cy", function(d, i) { return amountScale(d.btc_amount) })
           .attr("r", 0)
           .transition().duration(refreshFrequency)
           .attr("r", 5);
@@ -128,10 +105,6 @@
             .ease("linear")
             .call(timeAxis)
             .each("end", redraw);
-    }
-    
-    function ping() {
-    	wsSocket.send("ping");
     }
 
     init();
