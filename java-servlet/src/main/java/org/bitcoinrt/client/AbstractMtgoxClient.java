@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.JsonPath;
 
-public abstract class AbstractBitcoinClient implements BitcointClient {
+public abstract class AbstractMtgoxClient implements MtgoxSource {
 
 	protected static final String MTGOX_URL = "ws://websocket.mtgox.com:80/mtgox";
 	protected static final String MTGOX_TRADES_CHANNEL = "dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
@@ -36,12 +36,14 @@ public abstract class AbstractBitcoinClient implements BitcointClient {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected final List<BitcoinMessageListener> listeners = new ArrayList<BitcoinMessageListener>();
+	protected final List<MtgoxMessageListener> listeners = new ArrayList<MtgoxMessageListener>();
 
 	@Override
-	public void registerListener(BitcoinMessageListener listener) {
+	public void registerListener(MtgoxMessageListener listener) {
 		this.listeners.add(listener);
 	}
+
+	public abstract void start() throws Exception;
 
 	protected void onMessage(String message) {
 		String channel = JsonPath.compile("$.channel").read(message);
@@ -65,7 +67,7 @@ public abstract class AbstractBitcoinClient implements BitcointClient {
 
 	private void notifyMessageListeners(String message) {
 		try {
-			for (BitcoinMessageListener listener : this.listeners) {
+			for (MtgoxMessageListener listener : this.listeners) {
 				listener.onMessage(message);
 			}
 		}

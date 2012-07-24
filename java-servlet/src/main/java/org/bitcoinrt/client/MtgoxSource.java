@@ -16,11 +16,8 @@
 
 package org.bitcoinrt.client;
 
+public interface MtgoxSource {
 
-public interface BitcointClient {
-
-	void registerListener(BitcoinMessageListener listener);
-
-	void start() throws Exception;
+	void registerListener(MtgoxMessageListener listener);
 
 }

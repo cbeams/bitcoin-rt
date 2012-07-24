@@ -28,8 +28,8 @@ import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
-import org.bitcoinrt.client.BitcoinMessageListener;
-import org.bitcoinrt.client.BitcointClient;
+import org.bitcoinrt.client.MtgoxMessageListener;
+import org.bitcoinrt.client.MtgoxSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,19 +40,19 @@ public class TomcatBitcoinServlet extends WebSocketServlet {
 
 	private final Set<MessageInbound> connections = new CopyOnWriteArraySet<MessageInbound>();
 
-	public TomcatBitcoinServlet(BitcointClient bitcointClient) {
-		bitcointClient.registerListener(createListener());
-	}
-
-	private BitcoinMessageListener createListener() {
-		return new BitcoinMessageListener() {
+	public TomcatBitcoinServlet(MtgoxSource mtgoxSource) {
+		mtgoxSource.registerListener(new MtgoxMessageListener() {
 			@Override
 			public void onMessage(String message) throws IOException {
-				for (MessageInbound inbound : TomcatBitcoinServlet.this.connections) {
-					inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-				}
+				broadcastMessage(message);
 			}
-		};
+		});
+	}
+
+	private void broadcastMessage(String message) throws IOException {
+		for (MessageInbound inbound : TomcatBitcoinServlet.this.connections) {
+			inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
+		}
 	}
 
 	@Override

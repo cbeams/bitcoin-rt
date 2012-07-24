@@ -29,11 +29,11 @@ import org.eclipse.jetty.websocket.WebSocketClientFactory;
  * @see http://webtide.intalio.com/2011/09/jetty-websocket-client-api-updated/
  * @see http://download.eclipse.org/jetty/stable-7/apidocs/org/eclipse/jetty/websocket/WebSocketClient.html
  */
-public class JettyBitcoinClient extends AbstractBitcoinClient {
+public class JettyMtgoxClient extends AbstractMtgoxClient {
 
 	private final WebSocketClient webSocketClient;
 
-	public JettyBitcoinClient() {
+	public JettyMtgoxClient() {
 		this.webSocketClient = createWebSocketClient();
 	}
 
@@ -48,7 +48,6 @@ public class JettyBitcoinClient extends AbstractBitcoinClient {
 		return factory.newWebSocketClient();
 	}
 
-	@Override
 	public void start() throws Exception {
 		this.webSocketClient.open(new URI(MTGOX_URL), new MtgoxWebSocket()).get();
 	}
@@ -72,7 +71,7 @@ public class JettyBitcoinClient extends AbstractBitcoinClient {
 
 		@Override
 		public void onMessage(String message) {
-			JettyBitcoinClient.this.onMessage(message);
+			JettyMtgoxClient.this.onMessage(message);
 		}
 
 		@Override

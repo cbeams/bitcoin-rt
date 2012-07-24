@@ -3,3 +3,5 @@
 exp
 .project
 node_modules
+bin
+build

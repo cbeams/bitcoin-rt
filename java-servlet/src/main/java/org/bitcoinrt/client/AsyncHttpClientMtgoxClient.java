@@ -28,7 +28,7 @@ import com.ning.http.client.websocket.WebSocketUpgradeHandler;
  *
  * @see https://github.com/sonatype/async-http-client
  */
-public class AsyncHttpClientBitcoinClient extends AbstractBitcoinClient {
+public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 	private final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 
@@ -52,7 +52,7 @@ public class AsyncHttpClientBitcoinClient extends AbstractBitcoinClient {
 
 		@Override
 		public void onMessage(String message) {
-			AsyncHttpClientBitcoinClient.this.onMessage(message);
+			AsyncHttpClientMtgoxClient.this.onMessage(message);
 		}
 
 		@Override

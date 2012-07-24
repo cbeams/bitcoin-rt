@@ -18,7 +18,7 @@ package org.bitcoinrt.client;
 
 import java.io.IOException;
 
-public interface BitcoinMessageListener {
+public interface MtgoxMessageListener {
 
 	void onMessage(String message) throws IOException;
 

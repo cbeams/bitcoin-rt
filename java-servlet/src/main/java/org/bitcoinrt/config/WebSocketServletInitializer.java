@@ -20,8 +20,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
-import org.bitcoinrt.client.AsyncHttpClientBitcoinClient;
-import org.bitcoinrt.client.BitcointClient;
+import org.bitcoinrt.client.AbstractMtgoxClient;
+import org.bitcoinrt.client.JettyMtgoxClient;
 import org.bitcoinrt.server.TomcatBitcoinServlet;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -30,15 +30,15 @@ public class WebSocketServletInitializer implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
-//		BitcointClient bitcoinClient = new JettyBitcoinClient();
-		BitcointClient bitcoinClient = new AsyncHttpClientBitcoinClient();
+		AbstractMtgoxClient mtgoxClient = new JettyMtgoxClient();
+//		AbstractMtgoxClient mtgoxClient = new AsyncHttpClientMtgoxClient();
 
-		Dynamic servlet = servletContext.addServlet("ws", new TomcatBitcoinServlet(bitcoinClient));
+		Dynamic servlet = servletContext.addServlet("ws", new TomcatBitcoinServlet(mtgoxClient));
 		servlet.addMapping("/tomcat");
 		servlet.setLoadOnStartup(1);
 
 		try {
-			bitcoinClient.start();
+			mtgoxClient.start();
 		}
 		catch (Exception ex) {
 			throw new ServletException(ex);
