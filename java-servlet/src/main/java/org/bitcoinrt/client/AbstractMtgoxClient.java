@@ -46,23 +46,28 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
 	public abstract void start() throws Exception;
 
 	protected void onMessage(String message) {
+		logger.debug("New message: " + message);
+
 		String channel = JsonPath.compile("$.channel").read(message);
 		String primary = JsonPath.compile("$.trade.primary").read(message);
-		if (!MTGOX_TRADES_CHANNEL.equals(channel) || !"Y".equals(primary)) {
+
+		if (MTGOX_TRADES_CHANNEL.equals(channel) && "Y".equals(primary)) {
+
+			JSONObject trade = JsonPath.compile("$.trade").read(message);
+			notifyMessageListeners(trade.toString());
+
+			// Example message:
+			// {"channel":"dbf1dee9-4f2e-4a08-8cb7-748919a71b21","op":"private","origin":"broadcast","private":"trade","trade":{"amount":0.01,"amount_int":"1000000","date":1342989115,"item":"BTC","price":8.50097,"price_currency":"USD","price_int":"850097","primary":"Y","properties":"limit","tid":"1342989115044532","trade_type":"bid","type":"trade"}}
+			logger.debug("Published trade: " + trade);
+		}
+		else {
             // ignore any non-trade messages that might slip in before our
             // op:unsubscribes sent above have been handled; also ignore any
             // 'non-primary' trades. see
             // https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1#Multi_currency_trades
-			logger.debug("Skipping message: channel:" + channel + ", primary:" + primary);
-			return;
+			logger.debug("Message ignored");
 		}
 
-		// Example message:
-		// {"channel":"dbf1dee9-4f2e-4a08-8cb7-748919a71b21","op":"private","origin":"broadcast","private":"trade","trade":{"amount":0.01,"amount_int":"1000000","date":1342989115,"item":"BTC","price":8.50097,"price_currency":"USD","price_int":"850097","primary":"Y","properties":"limit","tid":"1342989115044532","trade_type":"bid","type":"trade"}}
-		logger.debug("New Trade message: " + message);
-
-		JSONObject trade = JsonPath.compile("$.trade").read(message);
-		notifyMessageListeners(trade.toString());
 	}
 
 	private void notifyMessageListeners(String message) {

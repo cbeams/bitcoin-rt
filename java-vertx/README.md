@@ -1,6 +1,16 @@
 
-### install vert.x
-see http://vertx.io/install.html
+### install vert.x runtime
+See http://vertx.io/install.html
+
+### install vert.x in local Maven repository
+One way to do that is by cloning vert.x:
+```
+$ git clone https://github.com/vert-x/vert.x.git
+$ cd vert.x
+$ ./mk install -x javadoc
+```
+
+Note that this installs the latest development version of vert.x and that may be ahead of the latest vert.x runtime available for download (currently 1.2.0.final).
 
 ### build
 ```
@@ -9,9 +19,9 @@ see http://vertx.io/install.html
 
 ### run
 ```
-vertx run org.bitcoinrt.server.BitcoinVerticle -cp build/classes/main
+vertx run org.bitcoin.vertx.MainVerticle -cp build/classes/main
 ```
 
-Go to http://localhost:8080/
+Open http://localhost:8080/
 
 

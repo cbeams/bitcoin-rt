@@ -18,7 +18,7 @@ eclipse {
 }
 
 dependencies {
-	compile('org.vert-x:vertx-platform:1.2.0-SNAPSHOT')
+	compile('org.vert-x:vertx-platform:1.2.0.final')
 }
 
 task wrapper(type: Wrapper) {
