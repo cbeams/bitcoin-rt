@@ -1,10 +1,15 @@
 
-apply plugin: 'java '
+apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
+task(vertx, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.bitcoinrt.server.BitcoinVerticle'
+	classpath = sourceSets.main.runtimeClasspath
+}
 
 repositories {
 	mavenLocal()
@@ -18,9 +23,7 @@ eclipse {
 }
 
 dependencies {
-
-	compile('org.vert-x:vertx-core:1.2.0-SNAPSHOT')
-
+	compile('org.vert-x:vertx-platform:1.2.0-SNAPSHOT')
 }
 
 task wrapper(type: Wrapper) {

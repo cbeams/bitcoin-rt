@@ -1,7 +1,7 @@
 (function() {
 
   var trades = [];
-
+  
   var socket = new SockJS('/bitcoin');
 
   socket.onopen = function(event) {
@@ -9,7 +9,9 @@
   };
 
   socket.onmessage = function(event) {
+    console.log(event.data);
     var trade = JSON.parse(event.data);
+    trade.date = trade.date * 1000;
     trades.push(trade);
   };
 
@@ -122,7 +124,7 @@
   }
 
   var bitcoinChart = BitcoinChart();
-  
+
   var button = d3.select("#control");
   button.on("click", function() {
     if (button.text() === "Resume") {
@@ -138,5 +140,3 @@
   bitcoinChart.start();
 
 })();
-
-

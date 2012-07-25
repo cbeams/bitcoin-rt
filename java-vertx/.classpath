@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0"/>
+	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
-	<classpathentry sourcepath="/home/rossen/.m2/repository/org/vert-x/vertx-core/1.2.0-SNAPSHOT/vertx-core-1.2.0-SNAPSHOT-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/vert-x/vertx-core/1.2.0-SNAPSHOT/vertx-core-1.2.0-SNAPSHOT.jar" exported="true"/>
+	<classpathentry sourcepath="/home/rossen/.m2/repository/org/vert-x/vertx-platform/1.2.0-SNAPSHOT/vertx-platform-1.2.0-SNAPSHOT-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/vert-x/vertx-platform/1.2.0-SNAPSHOT/vertx-platform-1.2.0-SNAPSHOT.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.m2/repository/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.gradle/caches/artifacts-13/filestore/io.netty/netty/3.5.0.Final/source/2a2b820828d1948c60258345c62fe06ba2960624/netty-3.5.0.Final-sources.jar" kind="lib" path="/home/rossen/.gradle/caches/artifacts-13/filestore/io.netty/netty/3.5.0.Final/bundle/60ecb5ad31045dc93e1b0fe8d0f14410d2011282/netty-3.5.0.Final.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16-sources.jar" kind="lib" path="/home/rossen/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.9.4/jackson-core-asl-1.9.4-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.9.4/jackson-core-asl-1.9.4.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.4/jackson-mapper-asl-1.9.4-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.4/jackson-mapper-asl-1.9.4.jar" exported="true"/>
 	<classpathentry sourcepath="/home/rossen/.gradle/caches/artifacts-13/filestore/com.hazelcast/hazelcast/2.1.2/source/a14c6123d5660cd7be4b0c4a98dbce15db27400a/hazelcast-2.1.2-sources.jar" kind="lib" path="/home/rossen/.gradle/caches/artifacts-13/filestore/com.hazelcast/hazelcast/2.1.2/jar/4a8d6391560fdb954f4c8b2f76fcf6ff349631d0/hazelcast-2.1.2.jar" exported="true"/>
+	<classpathentry sourcepath="/home/rossen/.m2/repository/org/vert-x/vertx-core/1.2.0-SNAPSHOT/vertx-core-1.2.0-SNAPSHOT-sources.jar" kind="lib" path="/home/rossen/.m2/repository/org/vert-x/vertx-core/1.2.0-SNAPSHOT/vertx-core-1.2.0-SNAPSHOT.jar" exported="true"/>
 </classpath>
