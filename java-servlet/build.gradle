@@ -12,11 +12,11 @@ repositories {
 
 eclipse {
   project {
-    name = 'bitcoin-rt-java-servlet'
+    name = 'bitcoin-java-servlet'
   }
 }
 
-war.baseName = 'bitcoin-rt-java-servlet'
+war.baseName = 'bitcoin-java-servlet'
 
 dependencies {
 

@@ -6,13 +6,14 @@
 
   	var ready = false;
   	
-    var socket = new WebSocket('ws://localhost:8080/bitcoin-rt-java-servlet/tomcat');
+    var socket = new WebSocket('ws://localhost:8080/bitcoin-java-servlet/tomcat');
 
     socket.onopen = function(event) {
       ready = true;
     };
 
     socket.onmessage = function(event) {
+      console.log(event.data);
       var trade = JSON.parse(event.data);
       trade.date = trade.date * 1000;
       trades.push(trade);

@@ -6,11 +6,6 @@ apply plugin: 'idea'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-task(vertx, dependsOn: 'classes', type: JavaExec) {
-	main = 'org.bitcoinrt.server.BitcoinVerticle'
-	classpath = sourceSets.main.runtimeClasspath
-}
-
 repositories {
 	mavenLocal()
 	mavenCentral()
@@ -18,7 +13,7 @@ repositories {
 
 eclipse {
   project {
-    name = 'bitcoint-rt-java-vertx'
+    name = 'bitcoin-java-vertx'
   }
 }
 

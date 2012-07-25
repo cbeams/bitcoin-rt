@@ -62,9 +62,8 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 				connection.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
 				connection.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
 			}
-			catch (IOException e) {
-				e.printStackTrace();
-				throw new IllegalStateException(e);
+			catch (IOException ex) {
+				logger.error("Unsubscribe failed", ex);
 			}
 			logger.debug("Waiting for messages...");
 		}
