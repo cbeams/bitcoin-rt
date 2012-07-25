@@ -2,6 +2,10 @@
 *.sw?
 exp
 .project
+.classpath
+.settings
+.gradle
 node_modules
 bin
 build
+
