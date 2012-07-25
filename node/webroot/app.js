@@ -78,7 +78,7 @@
           .style("stroke", "gray")
           .style("fill", "red")
           .attr("cx", function(d, i) { return timeScale(d.date) })
-          .attr("cy", function(d, i) { return amountScale(d.btc_amount) })
+          .attr("cy", function(d, i) { return amountScale(d.amount) })
           .attr("r", 0)
           .transition().duration(refreshFrequency)
           .attr("r", 5);

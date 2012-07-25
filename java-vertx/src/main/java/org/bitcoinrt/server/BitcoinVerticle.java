@@ -15,9 +15,6 @@
  */
 package org.bitcoinrt.server;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpClient;
@@ -25,9 +22,9 @@ import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.core.http.WebSocket;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.sockjs.SockJSServer;
-import org.vertx.java.core.sockjs.SockJSSocket;
 import org.vertx.java.deploy.Verticle;
 
 public class BitcoinVerticle extends Verticle {
@@ -35,8 +32,6 @@ public class BitcoinVerticle extends Verticle {
 	protected static final String MTGOX_TRADES_CHANNEL = "dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
 	protected static final String MTGOX_TICKER_CHANNEL = "d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
 	protected static final String MTGOX_DEPTH_CHANNEL = "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
-
-	private final Set<SockJSSocket> bitcointClients = new CopyOnWriteArraySet<SockJSSocket>();
 
 	public static void main(String[] args) {
 		JsonObject o = new JsonObject("{\"channel\":\"dbf1dee9-4f2e-4a08-8cb7-748919a71b21\",\"op\":\"private\",\"origin\":\"broadcast\",\"private\":\"trade\",\"trade\":{\"amount\":5,\"amount_int\":\"500000000\",\"date\":1343180077,\"item\":\"BTC\",\"price\":8.57619,\"price_currency\":\"USD\",\"price_int\":\"857619\",\"primary\":\"Y\",\"properties\":\"limit\",\"tid\":\"1343180077270684\",\"trade_type\":\"bid\",\"type\":\"trade\"}}");
@@ -65,22 +60,11 @@ public class BitcoinVerticle extends Verticle {
 
 
 		// SockJS server
-		JsonObject config = new JsonObject().putString("prefix", "/bitcoin");
-		SockJSServer sockjsServer = vertx.createSockJSServer(httpServer);
-		sockjsServer.installApp(config, new Handler<SockJSSocket>() {
-			@Override
-			public void handle(final SockJSSocket socket) {
-				container.getLogger().info("New SockJS connection established...");
-				bitcointClients.add(socket);
-				socket.endHandler(new Handler<Void>() {
-					@Override
-					public void handle(Void event) {
-						container.getLogger().info("Removing SockJS client...");
-						bitcointClients.remove(socket);
-					}
-				});
-			}
-		});
+		JsonArray permitted = new JsonArray();
+	    permitted.add(new JsonObject()); // Let everything through
+	    SockJSServer sockJSServer = vertx.createSockJSServer(httpServer);
+	    sockJSServer.bridge(new JsonObject().putString("prefix", "/bitcoin"), permitted, permitted);
+
 		httpServer.listen(8080);
 
 
@@ -95,12 +79,10 @@ public class BitcoinVerticle extends Verticle {
 				ws.dataHandler(new Handler<Buffer>() {
 					@Override
 					public void handle(Buffer buffer) {
-						container.getLogger().info("Received new message...");
-						String tradeMessage = new JsonObject(buffer.toString()).getObject("trade").toString();
-						container.getLogger().info("Trade: " + tradeMessage);
-						for (SockJSSocket socket : bitcointClients) {
-							socket.writeBuffer(new Buffer(tradeMessage));
-						}
+						container.getLogger().info("Message received: " + buffer);
+						JsonObject trade = new JsonObject(buffer.toString()).getObject("trade");
+						container.getLogger().info("Trade details: " + trade);
+						vertx.eventBus().publish("bitcoin.trades", trade);
 					}
 				});
 				ws.endHandler(new Handler<Void>() {

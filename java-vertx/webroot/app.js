@@ -2,27 +2,20 @@
 
   var trades = [];
   
-  var socket = new SockJS('/bitcoin');
+  var eb = new vertx.EventBus("http://localhost:8080/bitcoin")
 
-  socket.onopen = function(event) {
-    // no-op
+  eb.onopen = function () {
+    console.log("Connected to bitcoin event bus");
+    eb.registerHandler("bitcoin.trades", function (msg, replyTo) {
+      console.log("Message: " + JSON.stringify(msg));
+      var trade = msg;
+      trade.date = trade.date * 1000;
+      trades.push(trade);
+    });
   };
-
-  socket.onmessage = function(event) {
-    console.log(event.data);
-    var trade = JSON.parse(event.data);
-    trade.date = trade.date * 1000;
-    trades.push(trade);
-  };
-
-  socket.onerror = function(event) {
-    console.log("A WebSocket error occured");
-    console.log(event);
-  };
-
-  socket.onclose = function(event) {
-    console.log("Remote host closed or refused WebSocket connection");
-    console.log(event);
+  
+  eb.onclose = function () {
+    console.log("Lost connection to bitcoin event bus")
   };
 
   function BitcoinChart() {
@@ -80,7 +73,7 @@
           .style("stroke", "gray")
           .style("fill", "red")
           .attr("cx", function(d, i) { return timeScale(d.date) })
-          .attr("cy", function(d, i) { return amountScale(d.btc_amount) })
+          .attr("cy", function(d, i) { return amountScale(d.amount) })
           .attr("r", 0)
           .transition().duration(refreshFrequency)
           .attr("r", 5);
