@@ -7,8 +7,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenCentral()
 }
 
 eclipse {
@@ -18,11 +17,10 @@ eclipse {
 }
 
 dependencies {
-	compile('org.vert-x:vertx-platform:1.2.0.final')
+    compile('org.vert-x:vertx-platform:1.2.3.final')
 }
 
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts'
-    gradleVersion = '1.0'
+    gradleVersion = '1.1'
 }
-
