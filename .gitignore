@@ -8,4 +8,5 @@ exp
 node_modules
 bin
 build
-
+target
+.DS_Store
