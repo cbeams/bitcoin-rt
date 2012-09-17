@@ -13,21 +13,16 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
-package org.bitcoinrt.atmosphere.mvc.controller;
-
-import java.io.IOException;
+package org.bitcoinrt.atmosphere.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.atmosphere.cpr.AtmosphereResource;
 import org.bitcoinrt.atmosphere.AtmosphereUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 /**
  * Handles requests for the application home page.
@@ -41,7 +36,7 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value={"/"})
+	@RequestMapping("/")
 	public String home() {
 		return "home";
 	}
@@ -51,11 +46,9 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/websockets", method = RequestMethod.GET)
 	@ResponseBody
-	public void websockets(final AtmosphereResource event)
-			throws JsonGenerationException, JsonMappingException, IOException {
-
-		AtmosphereUtils.suspend(event);
-
+	public void websockets(AtmosphereResource resource) throws Exception {
+		AtmosphereUtils.suspend(resource);
 	}
+
 }
 

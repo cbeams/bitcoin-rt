@@ -16,9 +16,6 @@
 
 package org.bitcoinrt.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minidev.json.JSONObject;
 
 import org.atmosphere.cpr.MetaBroadcaster;
@@ -35,8 +32,6 @@ public abstract class AbstractMtgoxClient {
 	protected static final String MTGOX_DEPTH_CHANNEL = "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-	protected final List<MtgoxMessageListener> listeners = new ArrayList<MtgoxMessageListener>();
 
 	public abstract void start() throws Exception;
 
@@ -62,7 +57,6 @@ public abstract class AbstractMtgoxClient {
 			// https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1#Multi_currency_trades
 			logger.debug("Message ignored");
 		}
-
 	}
 
 	private void notifyMessageListeners(String message) {
