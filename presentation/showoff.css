@@ -1,0 +1,29 @@
+
+#preso, .slide {
+/*
+  width: 1280px;
+  height: 720px;
+*/
+  width: 1024px;
+  height: 768px;
+}
+
+.subsection h1 {
+  color: white;
+  background: rgb(0, 150, 50);
+}
+
+h1, h2 {
+  color: rgb(0, 150, 50);
+  font-family: Verdana, Georgia;
+}
+
+.content {
+  color: #535353;
+	font-family: "Arial", sans-serif;
+}
+
+a, a:hover, a:visited {
+  color: blue;
+}
+

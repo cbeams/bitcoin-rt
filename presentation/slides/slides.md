@@ -1,5 +1,5 @@
 !SLIDE subsection
-# Intro to WebSockets
+# Intro to WebSockets WebSockets
 ## _Subtitle_
 <br><br>
 ## Rossen Stoyanchev
