@@ -2,34 +2,33 @@
 var http = require('http'),
     static = require('node-static'),
     sockjs = require('sockjs'),
-    mtgox = require('./mtgox.js'),
+//    mtgox = require('./mtgox.js'),
+    mtgox = require('./mtgox-stub.js'),
     trades_db = require('./trades-db.js');
 
 // serve static resources
 var webroot = new static.Server('./webroot');
 var httpServer = http.createServer(function (req, res) {
     webroot.serve(req, res);
-}).listen(1337, function () { });
+}).listen(1337, function () {});
 
-// holds client, websocket connections
+// holds client connections
 var clients = [];
 
 var sockjs_options = {
-  sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js", 
-  prefix:'/bitcoin'
+  sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js"
 };
 
-sockjs.createServer(sockjs_options)
+sockjs.createServer()
     .on('connection', function(conn) {
         clients.push(conn);
-
         var trades = trades_db.forEachTrade(function (trade) {
             conn.write(JSON.stringify(trade));
         });
-
-        // TODO: register 'close' handler
-
-    }).installHandlers(httpServer);
+        conn.on('close', function() {
+          removeDisconnectedClients();
+        });
+    }).installHandlers(httpServer, {prefix : '/bitcoin'});
 
 function removeDisconnectedClients() {
     clients.filter(function (conn) { 
@@ -39,7 +38,7 @@ function removeDisconnectedClients() {
     });
 }
 
-mtgox.addNewTradeCallback(function(trade) {
+mtgox.registerListener(function(trade) {
     trades_db.saveTrade(trade);
     clients.forEach(function (conn) {
         conn.write(JSON.stringify(trade));

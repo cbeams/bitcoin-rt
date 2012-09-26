@@ -50,6 +50,8 @@ see http://www.mongodb.org/downloads#packages
 see https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 
 ## run the app
+Assuming mongod is already running (see above):
+
 ```
 git clone git://github.com/cbeams/bitcoin-rt.git
 cd bitcoin-rt/node

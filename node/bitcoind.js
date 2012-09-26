@@ -2,7 +2,8 @@
 var http = require('http'),
     static = require('node-static'),
     WebSocketServer = require('websocket').server,
-    mtgox = require('./mtgox.js'),
+//    mtgox = require('./mtgox.js'),
+    mtgox = require('./mtgox-stub.js'),
     trades_db = require('./trades-db.js');
 
 // serve static resources
@@ -38,7 +39,7 @@ function removeDisconnectedClients() {
     });
 }
 
-mtgox.addNewTradeCallback(function(trade) {
+mtgox.registerListener(function(trade) {
     trades_db.saveTrade(trade);
     clients.forEach(function (conn) {
         conn.send(JSON.stringify(trade));

@@ -2,6 +2,8 @@
 
   var trades = [];
 
+  console.log("opening sockjs socket");
+
   var socket = new SockJS('/bitcoin');
 
   socket.onopen = function(event) {
