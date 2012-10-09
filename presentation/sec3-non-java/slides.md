@@ -2,33 +2,27 @@
 # Non-Java Solutions
 
 !SLIDE small incremental bullets
-# Blah
-* blah
-* blah
-* blah
+# Node.js
+* <a href="https://npmjs.org/package/websocket">`Websocket` plugin</a>
+* <a href="http://socket.io/">socket.io</a>
+* <a href="http://sockjs.org">sockJS</a>
 
-!SLIDE smaller
-# Code Sample
+!SLIDE small
+# More Than Just WebSocket
 
-    @@@ java
-    public class DispatcherServletInitializer extends
-          AbstractAnnotationConfigDispatcherServletInitializer {
+!SLIDE small center
+# SockJS Transports
+![sockjs-transports.png](sockjs-transports.png)
 
-      protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] { RootConfig.class };
-      }
+!SLIDE small bullets incremental
+# socket.io vs sockJS
+* `socket.io` more popular
+* `sockJS` focused on transports, horizontal scalability
+* <a href="https://groups.google.com/forum/#!topic/sockjs/lgzxVnlth54/discussion">Discussion thread</a>
 
-      protected Class<?>[] getServletConfigClasses() {
-          return new Class<?>[] { WebMvcConfig.class };
-      }
-
-      protected String[] getServletMappings() {
-          return new String[] { "/" };
-      }
-
-      protected Filter[] getServletFilters() {
-          return new Filter[] { new OpenSessionInViewFilter() };
-      }
-
-    }
+!SLIDE small bullets incremental
+# Ruby
+* <a href="https://github.com/igrigorik/em-websocket">EM-WebScoket</a>
+* _socket.io-rack_
+* _sockJS-ruby_
 

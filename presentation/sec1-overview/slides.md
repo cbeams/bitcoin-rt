@@ -1,15 +1,17 @@
 !SLIDE subsection
-# Intro to WebSockets
-## _Subtitle_
+# Intro to WebSocket
 <br><br>
 ## Chris Beams
 ## Gunnar Hillert
 ## Rossen Stoyanchev
 
 !SLIDE subsection
-# Welcome!
+# Objective
 
-_Need a paragraph summarizing why we are here_
+## Survey the lay of the land
+## Less focus on syntax and mechanics
+## Broad, pragmatic perspective
+## Special emphasis on Java
 
 !SLIDE bullets
 * presentation source [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
@@ -52,7 +54,7 @@ Peter Lubbers
 # A Few Rules of Thumb
 * `"wss:"` provides a much better chance of success
 * Browsers using explicit proxy will likely work
-* Transparent proxies can support WebSockets
+* Transparent proxies can support WebSocket
 * but must be configured explicitly
 
 !SLIDE small bullets incremental
