@@ -1,0 +1,47 @@
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+	maven { url 'http://repo.springsource.org/libs-release' }
+	mavenCentral()
+}
+
+eclipse {
+  project {
+    name = 'bitcoin-atmosphere'
+  }
+}
+
+war.baseName = 'bitcoin-atmosphere'
+
+dependencies {
+	
+	compile('com.jayway.jsonpath:json-path:0.8.1')
+	compile('com.ning:async-http-client:1.7.4')
+	compile('org.springframework:spring-webmvc:3.1.2.RELEASE')
+	compile('org.atmosphere:atmosphere-runtime:1.0.0')
+	compile('cglib:cglib:2.2.2')
+	
+	compile('javax.servlet:jstl:1.2')
+	compile('org.glassfish.web:jstl-impl:1.2') {
+		exclude group: 'javax.servlet', module: 'servlet-api'
+		exclude group: 'javax.servlet.jsp', module: 'jsp-api'
+		exclude group: 'javax.servlet.jsp.jstl', module: 'jstl-api'
+	}
+	
+	providedCompile('javax.servlet:javax.servlet-api:3.0.1')
+	providedCompile('javax.servlet.jsp:jsp-api:2.1')
+
+	runtime('ch.qos.logback:logback-classic:1.0.1')
+	runtime('org.slf4j:jcl-over-slf4j:1.6.4')
+	
+	testCompile('junit:junit:4.10')
+}
+
+task wrapper(type: Wrapper) {
+    description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '1.2'
+}
