@@ -1,3 +1,8 @@
+## vert.x bitcoint-rt
+
+An implementation backed by vert.x on the server side;
+the only transaction data coming through at the moment are trades from the
+[MtGox] Bitcoin exchange.
 
 ### install vert.x runtime
 e.g.:
@@ -21,3 +26,7 @@ vertx run org.bitcoin.vertx.MainVerticle -cp build/classes/main
 ```
 
 Open http://localhost:8080/
+
+
+[mtgox]: https://mtgox.com
+

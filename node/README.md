@@ -1,7 +1,8 @@
-## Node.js with sockJS bitcoint-rt
+## Node.js bitcoint-rt
 
-An implementation backed by Node and Mongo on the server side and using
-sockJS for exchanging messages between client and server.
+An implementation backed by Node and Mongo on the server side;
+the only transaction data coming through at the moment are trades from the
+[MtGox] Bitcoin exchange.
 
 By default the sample runs with a "stub" MtGox service. To switch to the
 live version, edit bitcoind.js. If you don't see any trades on the graph
@@ -49,7 +50,6 @@ cd bitcoin-rt/node
 npm install websocket
 npm install node-static
 npm install mongodb
-npm install sockjs
 node bitcoind.js
 open http://localhost:1337
 ```
@@ -58,5 +58,6 @@ Oh, and bitcoinmonitor is a CPU hog. If you hear your fans spinning up, it's
 not bitcoin-rt's fault. Close the bitcoinmonitor window at that point. Data
 should be seen and not heard.
 
+[mtgox]: https://mtgox.com
 [homebrew]: http://mxcl.github.com/homebrew
 
