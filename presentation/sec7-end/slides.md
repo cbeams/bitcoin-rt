@@ -2,4 +2,4 @@
 !SLIDE subsection bullets
 # Thanks! Questions?
 * our info
-* @cbeams, @ghillert, @rstoyanchev
+* @cbeams, @ghillert, @rstoya05
