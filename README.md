@@ -13,11 +13,11 @@ they wish to see, hover for detailed transaction data, and ideally provide a
 which kinds of transactions they wish to see, which exchanges, etc.
 
 A number of functionally equivalent implementations are available:
-# [Node.js](node)
-# [Node.js with sockJS](node-sockjs)
-# [Tomcat](java-servlet)
-# [vert.x](java-vertx)
-# [Atmosphere](atmosphere)
+* [Node.js](bitcoint-rt/node)
+* [Node.js with sockJS](bitcoint-rt/node-sockjs)
+* [Tomcat](bitcoint-rt/java-servlet)
+* [vert.x](bitcoint-rt/java-vertx)
+* [Atmosphere](bitcoint-rt/atmosphere)
 
 [d3]: http://d3js.org
 [bitcoin]: http://bitcoin.org
