@@ -49,7 +49,14 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
 		logger.debug("New message: " + message);
 
 		String channel = JsonPath.compile("$.channel").read(message);
-		String primary = JsonPath.compile("$.trade.primary").read(message);
+
+		String primary = null;
+		try {
+			primary = JsonPath.compile("$.trade.primary").read(message);
+		}
+		catch (Exception ex) {
+			// ignore
+		}
 
 		if (MTGOX_TRADES_CHANNEL.equals(channel) && "Y".equals(primary)) {
 

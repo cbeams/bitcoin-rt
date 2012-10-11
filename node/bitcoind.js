@@ -2,15 +2,19 @@
 var http = require('http'),
     static = require('node-static'),
     WebSocketServer = require('websocket').server,
-//    mtgox = require('./mtgox.js'),
-    mtgox = require('./mtgox-stub.js'),
     trades_db = require('./trades-db.js');
+
+// switch between stub and "live" MtGox
+var mtgox = require('./mtgox-stub.js');
+// var mtgox = require('./mtgox.js');
 
 // serve static resources
 var webroot = new static.Server('./webroot');
 var httpServer = http.createServer(function (req, res) {
     webroot.serve(req, res);
 }).listen(1337, function () { });
+
+console.log("Started listening on port 1337");
 
 // holds client, websocket connections
 var clients = [];
