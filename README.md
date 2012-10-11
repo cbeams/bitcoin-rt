@@ -12,12 +12,9 @@ they wish to see, hover for detailed transaction data, and ideally provide a
 [Google-finance][] style set of checkboxes allowing the user to include/exclude
 which kinds of transactions they wish to see, which exchanges, etc.
 
-A number of functionally equivalent implementations are available:
-* [Node.js](bitcoin-rt/tree/master/node)
-* [Node.js with sockJS](bitcoin-rt/tree/master/node-sockjs)
-* [Tomcat](bitcoin-rt/tree/master/java-servlet)
-* [vert.x](bitcoin-rt/tree/master/java-vertx)
-* [Atmosphere](bitcoin-rt/tree/master/atmosphere)
+A number of functionally equivalent implementations are available in the various
+sub-directories including Node.js, Node.js with sockJS, Tomcat-based Servlet,
+vert.x, and Atmopshere.
 
 [d3]: http://d3js.org
 [bitcoin]: http://bitcoin.org
