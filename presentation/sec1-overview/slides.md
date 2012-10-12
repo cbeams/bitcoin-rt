@@ -1,11 +1,11 @@
-!SLIDE subsection
-# Intro to WebSocket
-<br><br>
-## Chris Beams
-## Gunnar Hillert
-## Rossen Stoyanchev
+!SLIDE cover
+# Intro to WebSockets #
 
-!SLIDE subsection bullets
+## Chris Beams ##
+## Gunnar Hillert ##
+## Rossen Stoyanchev ##
+
+!SLIDE bullets
 # Objective
 
 * Survey the lay of the land
@@ -14,6 +14,8 @@
 * Special emphasis on Java
 
 !SLIDE bullets
+# Source
+
 * presentation source [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
 * bitcoin-rt demo source [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
 
@@ -21,7 +23,7 @@
 # WebSockets ... 101
 
 !SLIDE smaller
-
+# WebSockets ... 101
       0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      +-+-+-+-+-------+-+-------------+-------------------------------+
@@ -41,9 +43,10 @@
      |                     Payload Data continued ...                |
      +---------------------------------------------------------------+
 
-http://www.ietf.org/rfc/rfc6455.txt
+<div class="footnote">http://www.ietf.org/rfc/rfc6455.txt</div>
 
 !SLIDE small
+# WebSockets ... 101
 
     GET /mychat HTTP/1.1
     Host: server.example.com
@@ -60,14 +63,13 @@ http://www.ietf.org/rfc/rfc6455.txt
     Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
     Sec-WebSocket-Protocol: chat
 
-!SLIDE
+!SLIDE small
 something about original intent of 101/Upgrade?
 http://www.ietf.org/rfc/rfc2616.txt
 
 !SLIDE small center
 # Browser Support
 ![can-i-use-websockets.png](can-i-use-websockets.png)
-<a href="http://caniuse.com/websockets">caniuse.com/websockets</a>
 
 !SLIDE small center
 # Browser Share (World-Wide)
@@ -88,12 +90,11 @@ http://www.ietf.org/rfc/rfc2616.txt
 * Indistinguishable from unresponsive HTTP server
 * Proxies may also buffer unencrypted responses
 
-!SLIDE small
-## "Today, most transparent proxy servers will not yet be familiar with the Web Socket protocol and these proxy servers will be unable to support the Web Socket protocol"
-Peter Lubbers
-<br>
-<a href="http://www.infoq.com/articles/Web-Sockets-Proxy-Servers">
-  http://www.infoq.com/articles/Web-Sockets-Proxy-Servers</a>
+!SLIDE quote
+# Proxy Traversal
+Today, most transparent proxy servers will not yet be familiar with the Web Socket protocol and these proxy servers will be unable to support the Web Socket protocol
+
+<div class="footnote">Peter Lubbers - http://www.infoq.com/articles/Web-Sockets-Proxy-Servers</div>
 
 !SLIDE small bullets incremental
 # A Few Rules of Thumb

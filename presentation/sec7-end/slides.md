@@ -1,5 +1,5 @@
 
-!SLIDE subsection bullets
-# Thanks! Questions?
-* our info
-* @cbeams, @ghillert, @rstoya05
+!SLIDE subsection
+# Thanks!  Questions?
+
+## @cbeams, @ghillert, @rstoya05
