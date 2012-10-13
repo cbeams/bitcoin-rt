@@ -5,8 +5,8 @@ var http = require('http'),
     trades_db = require('./trades-db.js');
 
 // switch between stub and "live" MtGox
-var mtgox = require('./mtgox-stub.js');
-// var mtgox = require('./mtgox.js');
+//var mtgox = require('./mtgox-stub.js');
+var mtgox = require('./mtgox.js');
 
 // serve static resources
 var webroot = new static.Server('./webroot');

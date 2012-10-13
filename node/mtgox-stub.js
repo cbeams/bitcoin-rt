@@ -11,7 +11,7 @@ exports.registerListener = function(listener) {
 console.log("Starting mock MtGox service");
 
 setInterval(function() {
-  
+
     var trade = {
         "type" : "trade",
         "exchange" : "mtgoxUSD",
@@ -21,8 +21,9 @@ setInterval(function() {
         "price_currency" : "USD",
         "txid" : "1348679989121772"
     };
-  
+
     console.log('sending trade ' + JSON.stringify(trade));
+    console.log('date ' + new Date() + " / " + new Date().getTime());
     
     listeners.forEach(function(listener) {
       listener(trade);

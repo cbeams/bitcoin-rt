@@ -45,6 +45,8 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
 
 	public abstract void start() throws Exception;
 
+	public abstract void stop() throws Exception;
+
 	protected void onMessage(String message) {
 		logger.debug("New message: " + message);
 

@@ -16,8 +16,6 @@
 
 package org.bitcoinrt.client;
 
-import java.io.IOException;
-
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
@@ -32,21 +30,33 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 	private final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 
-	public void start() throws IOException {
+	private WebSocket websocket;
+
+
+	public void start() throws Exception {
 		MtgoxWebSocketListener listener = new MtgoxWebSocketListener();
 		WebSocketUpgradeHandler.Builder builder = new WebSocketUpgradeHandler.Builder();
 		builder.addWebSocketListener(listener);
 		this.asyncHttpClient.prepareGet(MTGOX_URL).execute(builder.build());
 	}
 
+	@Override
+	public void stop() throws Exception {
+		if (this.websocket != null) {
+			this.websocket.close();
+		}
+	}
+
+
 	private class MtgoxWebSocketListener extends DefaultWebSocketListener {
 
 		@Override
-		public void onOpen(WebSocket websocket) {
+		public void onOpen(WebSocket ws) {
+			AsyncHttpClientMtgoxClient.this.websocket = ws;
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
-			websocket.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
-			websocket.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
+			ws.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
+			ws.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
 			logger.debug("Waiting for messages...");
 		}
 
@@ -56,12 +66,14 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 		}
 
 		@Override
-		public void onClose(WebSocket websocket) {
+		public void onClose(WebSocket ws) {
+			AsyncHttpClientMtgoxClient.this.websocket = null;
 			logger.debug("Disconnected from {}", MTGOX_URL);
 		}
 
 		@Override
 		public void onError(Throwable t) {
+			AsyncHttpClientMtgoxClient.this.websocket = null;
 			logger.debug("Error from {}: {}", MTGOX_URL, t.getMessage());
 		}
 	}

@@ -55,6 +55,7 @@ public class TomcatBitcoinServlet extends WebSocketServlet {
 		}
 	}
 
+
 	@Override
 	protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
 		return new MessageInbound() {

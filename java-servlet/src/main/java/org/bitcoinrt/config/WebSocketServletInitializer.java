@@ -17,11 +17,13 @@
 package org.bitcoinrt.config;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import org.bitcoinrt.client.AbstractMtgoxClient;
-import org.bitcoinrt.client.JettyMtgoxClient;
+import org.bitcoinrt.client.StubMtgoxClient;
 import org.bitcoinrt.server.TomcatBitcoinServlet;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -30,19 +32,36 @@ public class WebSocketServletInitializer implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
-		AbstractMtgoxClient mtgoxClient = new JettyMtgoxClient();
-//		AbstractMtgoxClient mtgoxClient = new AsyncHttpClientMtgoxClient();
+		final AbstractMtgoxClient mtgoxClient = new StubMtgoxClient();
+//		final AbstractMtgoxClient mtgoxClient = new JettyMtgoxClient();
+//		final AbstractMtgoxClient mtgoxClient = new AsyncHttpClientMtgoxClient();
 
 		Dynamic servlet = servletContext.addServlet("ws", new TomcatBitcoinServlet(mtgoxClient));
 		servlet.addMapping("/tomcat");
 		servlet.setLoadOnStartup(1);
 
-		try {
-			mtgoxClient.start();
-		}
-		catch (Exception ex) {
-			throw new ServletException(ex);
-		}
+		servletContext.addListener(new ServletContextListener() {
+
+			@Override
+			public void contextInitialized(ServletContextEvent sce) {
+				try {
+					mtgoxClient.start();
+				}
+				catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+
+			@Override
+			public void contextDestroyed(ServletContextEvent sce) {
+				try {
+					mtgoxClient.stop();
+				}
+				catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
 	}
 
 }

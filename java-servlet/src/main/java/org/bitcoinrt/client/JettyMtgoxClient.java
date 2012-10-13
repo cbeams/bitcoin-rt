@@ -33,6 +33,9 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 
 	private final WebSocketClient webSocketClient;
 
+	private WebSocket.Connection connection;
+
+
 	public JettyMtgoxClient() {
 		this.webSocketClient = createWebSocketClient();
 	}
@@ -49,18 +52,25 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 	}
 
 	public void start() throws Exception {
-		this.webSocketClient.open(new URI(MTGOX_URL), new MtgoxWebSocket()).get();
+		this.webSocketClient.open(new URI(MTGOX_URL), new MtgoxWebSocket());
+	}
+
+	public void stop() throws Exception {
+		if (this.connection != null) {
+			this.connection.close();
+		}
 	}
 
 	private class MtgoxWebSocket implements WebSocket.OnTextMessage {
 
 		@Override
-		public void onOpen(Connection connection) {
+		public void onOpen(Connection conn) {
+			JettyMtgoxClient.this.connection = conn;
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
 			try {
-				connection.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
-				connection.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
+				conn.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
+				conn.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
 			}
 			catch (IOException ex) {
 				logger.error("Unsubscribe failed", ex);
@@ -75,8 +85,9 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 
 		@Override
 		public void onClose(int closeCode, String message) {
-			logger.debug("Disconnected from {} with closeCode={} and message={}",
-					new Object[] {MTGOX_URL, closeCode, message});
+			JettyMtgoxClient.this.connection = null;
+			String log = "Disconnected from {} with closeCode={} and message={}";
+			logger.debug(log, new Object[] {MTGOX_URL, closeCode, message});
 		}
 	}
 
