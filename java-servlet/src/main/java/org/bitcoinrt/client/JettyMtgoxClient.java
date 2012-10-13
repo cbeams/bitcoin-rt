@@ -24,48 +24,40 @@ import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
 /**
- * Jetty WebSocket client implementation
+ * Jetty WebSocket client implementation.
  *
  * @see http://webtide.intalio.com/2011/09/jetty-websocket-client-api-updated/
  * @see http://download.eclipse.org/jetty/stable-7/apidocs/org/eclipse/jetty/websocket/WebSocketClient.html
  */
 public class JettyMtgoxClient extends AbstractMtgoxClient {
 
-	private final WebSocketClient webSocketClient;
-
-	private WebSocket.Connection connection;
+	private final WebSocketClientFactory factory;
 
 
 	public JettyMtgoxClient() {
-		this.webSocketClient = createWebSocketClient();
+		this.factory = new WebSocketClientFactory();
 	}
 
-	private WebSocketClient createWebSocketClient() {
-		WebSocketClientFactory factory = new WebSocketClientFactory();
+	public void start() throws Exception {
 		try {
-			factory.start();
+			this.factory.start();
 		}
 		catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
-		return factory.newWebSocketClient();
-	}
 
-	public void start() throws Exception {
-		this.webSocketClient.open(new URI(MTGOX_URL), new MtgoxWebSocket());
+		WebSocketClient client = this.factory.newWebSocketClient();
+		client.open(new URI(MTGOX_URL), new MtgoxWebSocket());
 	}
 
 	public void stop() throws Exception {
-		if (this.connection != null) {
-			this.connection.close();
-		}
+		this.factory.stop();
 	}
 
 	private class MtgoxWebSocket implements WebSocket.OnTextMessage {
 
 		@Override
 		public void onOpen(Connection conn) {
-			JettyMtgoxClient.this.connection = conn;
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
 			try {
@@ -85,7 +77,6 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 
 		@Override
 		public void onClose(int closeCode, String message) {
-			JettyMtgoxClient.this.connection = null;
 			String log = "Disconnected from {} with closeCode={} and message={}";
 			logger.debug(log, new Object[] {MTGOX_URL, closeCode, message});
 		}

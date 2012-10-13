@@ -16,20 +16,22 @@
 package org.bitcoinrt.client;
 
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class StubMtgoxClient extends AbstractMtgoxClient {
 
-	private boolean shuttingDown = false;
+	private ExecutorService executor;
 
-	private Future<?> future;
+	private boolean shuttingDown = false;
 
 
 	@Override
 	public void start() throws Exception {
 
-		this.future = Executors.newSingleThreadExecutor().submit(new Runnable() {
+		this.executor = Executors.newSingleThreadExecutor();
+
+		this.executor.submit(new Runnable() {
 			@Override
 			public void run() {
 				while (!shuttingDown) {
@@ -53,7 +55,7 @@ public class StubMtgoxClient extends AbstractMtgoxClient {
 						logger.debug("Stub MtGox service interrupted");
 					}
 				}
-				logger.debug("Stub MtGox service shut down");
+				logger.debug("Stub MtGox service stopped");
 			}
 		});
 
@@ -61,9 +63,9 @@ public class StubMtgoxClient extends AbstractMtgoxClient {
 
 	@Override
 	public void stop() throws Exception {
-		logger.debug("Stopping stub MtGox service...");
+		logger.debug("Shutting down stub MtGox service...");
 		this.shuttingDown = true;
-		this.future.cancel(true);
+		this.executor.shutdownNow();
 	}
 
 }

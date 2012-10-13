@@ -30,8 +30,6 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 	private final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 
-	private WebSocket websocket;
-
 
 	public void start() throws Exception {
 		MtgoxWebSocketListener listener = new MtgoxWebSocketListener();
@@ -42,9 +40,7 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 	@Override
 	public void stop() throws Exception {
-		if (this.websocket != null) {
-			this.websocket.close();
-		}
+		this.asyncHttpClient.close();
 	}
 
 
@@ -52,7 +48,6 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 		@Override
 		public void onOpen(WebSocket ws) {
-			AsyncHttpClientMtgoxClient.this.websocket = ws;
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
 			ws.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
@@ -67,13 +62,11 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 		@Override
 		public void onClose(WebSocket ws) {
-			AsyncHttpClientMtgoxClient.this.websocket = null;
 			logger.debug("Disconnected from {}", MTGOX_URL);
 		}
 
 		@Override
 		public void onError(Throwable t) {
-			AsyncHttpClientMtgoxClient.this.websocket = null;
 			logger.debug("Error from {}: {}", MTGOX_URL, t.getMessage());
 		}
 	}
