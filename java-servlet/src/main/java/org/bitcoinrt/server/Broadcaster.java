@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.bitcoinrt.server;
 
-package org.bitcoinrt.client;
+public interface Broadcaster {
 
-import java.io.IOException;
-
-public interface MtgoxMessageListener {
-
-	void onMessage(String message) throws IOException;
+	void broadcast(String message);
 
 }

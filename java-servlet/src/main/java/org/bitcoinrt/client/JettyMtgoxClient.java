@@ -19,6 +19,7 @@ package org.bitcoinrt.client;
 import java.io.IOException;
 import java.net.URI;
 
+import org.bitcoinrt.server.Broadcaster;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
@@ -34,24 +35,31 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 	private final WebSocketClientFactory factory;
 
 
-	public JettyMtgoxClient() {
+	public JettyMtgoxClient(Broadcaster broadcaster) {
+		super(broadcaster);
 		this.factory = new WebSocketClientFactory();
 	}
 
-	public void start() throws Exception {
+	public void start() {
 		try {
 			this.factory.start();
+			WebSocketClient client = this.factory.newWebSocketClient();
+			client.open(new URI(MTGOX_URL), new MtgoxWebSocket());
 		}
-		catch (Exception e) {
-			throw new IllegalStateException(e);
+		catch (Exception ex) {
+			logger.error("Failed to start WebSocketClientFactory", ex);
 		}
-
-		WebSocketClient client = this.factory.newWebSocketClient();
-		client.open(new URI(MTGOX_URL), new MtgoxWebSocket());
 	}
 
-	public void stop() throws Exception {
-		this.factory.stop();
+	public void stop() {
+		try {
+			if (this.factory != null) {
+				this.factory.stop();
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Failed to stop WebSocketClientFactory", ex);
+		}
 	}
 
 	private class MtgoxWebSocket implements WebSocket.OnTextMessage {
@@ -72,7 +80,8 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 
 		@Override
 		public void onMessage(String message) {
-			JettyMtgoxClient.this.onMessage(message);
+			// Delegate to the parent
+			onMessage(message);
 		}
 
 		@Override
@@ -81,5 +90,4 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 			logger.debug(log, new Object[] {MTGOX_URL, closeCode, message});
 		}
 	}
-
 }

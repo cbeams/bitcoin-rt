@@ -28,36 +28,20 @@ import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
-import org.bitcoinrt.client.MtgoxMessageListener;
-import org.bitcoinrt.client.MtgoxSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
-public class TomcatBitcoinServlet extends WebSocketServlet {
+public class TomcatBitcoinServlet extends WebSocketServlet implements Broadcaster {
 
 	private Logger logger = LoggerFactory.getLogger(TomcatBitcoinServlet.class);
 
 	private final Set<MessageInbound> connections = new CopyOnWriteArraySet<MessageInbound>();
 
-	public TomcatBitcoinServlet(MtgoxSource mtgoxSource) {
-		mtgoxSource.registerListener(new MtgoxMessageListener() {
-			@Override
-			public void onMessage(String message) throws IOException {
-				broadcastMessage(message);
-			}
-		});
-	}
-
-	private void broadcastMessage(String message) throws IOException {
-		for (MessageInbound inbound : TomcatBitcoinServlet.this.connections) {
-			inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-		}
-	}
-
 
 	@Override
-	protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest request) {
+	protected StreamInbound createWebSocketInbound(String subProtocol, HttpServletRequest req) {
+
 		return new MessageInbound() {
 			@Override
 			protected void onOpen(WsOutbound outbound) {
@@ -78,6 +62,18 @@ public class TomcatBitcoinServlet extends WebSocketServlet {
 				logger.trace("Got binary message");
 			}
 		};
+	}
+
+	@Override
+	public void broadcast(String message) {
+		for (MessageInbound inbound : TomcatBitcoinServlet.this.connections) {
+			try {
+				inbound.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
+			}
+			catch (IOException ex) {
+				this.logger.error("Failed to broadcast message", ex);
+			}
+		}
 	}
 
 }

@@ -16,18 +16,15 @@
 
 package org.bitcoinrt.client;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minidev.json.JSONObject;
 
+import org.bitcoinrt.server.Broadcaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.JsonPath;
 
-public abstract class AbstractMtgoxClient implements MtgoxSource {
+public abstract class AbstractMtgoxClient {
 
 	protected static final String MTGOX_URL = "ws://websocket.mtgox.com:80/mtgox";
 	protected static final String MTGOX_TRADES_CHANNEL = "dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
@@ -36,16 +33,16 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected final List<MtgoxMessageListener> listeners = new ArrayList<MtgoxMessageListener>();
+	private final Broadcaster broadcaster;
 
-	@Override
-	public void registerListener(MtgoxMessageListener listener) {
-		this.listeners.add(listener);
+
+	public AbstractMtgoxClient(Broadcaster broadcaster) {
+		this.broadcaster = broadcaster;
 	}
 
-	public abstract void start() throws Exception;
+	public abstract void start();
 
-	public abstract void stop() throws Exception;
+	public abstract void stop();
 
 	protected void onMessage(String message) {
 		logger.debug("New message: " + message);
@@ -63,7 +60,7 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
 		if (MTGOX_TRADES_CHANNEL.equals(channel) && "Y".equals(primary)) {
 
 			JSONObject trade = JsonPath.compile("$.trade").read(message);
-			notifyMessageListeners(trade.toString());
+			this.broadcaster.broadcast(trade.toString());
 
 			// Example message:
 			// {"channel":"dbf1dee9-4f2e-4a08-8cb7-748919a71b21","op":"private","origin":"broadcast","private":"trade","trade":{"amount":0.01,"amount_int":"1000000","date":1342989115,"item":"BTC","price":8.50097,"price_currency":"USD","price_int":"850097","primary":"Y","properties":"limit","tid":"1342989115044532","trade_type":"bid","type":"trade"}}
@@ -76,18 +73,5 @@ public abstract class AbstractMtgoxClient implements MtgoxSource {
             // https://en.bitcoin.it/wiki/MtGox/API/HTTP/v1#Multi_currency_trades
 			logger.debug("Message ignored");
 		}
-
 	}
-
-	private void notifyMessageListeners(String message) {
-		try {
-			for (MtgoxMessageListener listener : this.listeners) {
-				listener.onMessage(message);
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

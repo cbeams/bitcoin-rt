@@ -16,6 +16,10 @@
 
 package org.bitcoinrt.client;
 
+import java.io.IOException;
+
+import org.bitcoinrt.server.Broadcaster;
+
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
@@ -31,18 +35,28 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 	private final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 
 
-	public void start() throws Exception {
-		MtgoxWebSocketListener listener = new MtgoxWebSocketListener();
+	public AsyncHttpClientMtgoxClient(Broadcaster broadcaster) {
+		super(broadcaster);
+	}
+
+	public void start() {
 		WebSocketUpgradeHandler.Builder builder = new WebSocketUpgradeHandler.Builder();
-		builder.addWebSocketListener(listener);
-		this.asyncHttpClient.prepareGet(MTGOX_URL).execute(builder.build());
+		builder.addWebSocketListener(new MtgoxWebSocketListener());
+		WebSocketUpgradeHandler handler = builder.build();
+		try {
+			this.asyncHttpClient.prepareGet(MTGOX_URL).execute(handler);
+		}
+		catch (IOException ex) {
+			logger.error("Failed to execute WebSocketUpgradeHandler", ex);
+		}
 	}
 
 	@Override
-	public void stop() throws Exception {
-		this.asyncHttpClient.close();
+	public void stop() {
+		if (this.asyncHttpClient != null) {
+			this.asyncHttpClient.close();
+		}
 	}
-
 
 	private class MtgoxWebSocketListener extends DefaultWebSocketListener {
 

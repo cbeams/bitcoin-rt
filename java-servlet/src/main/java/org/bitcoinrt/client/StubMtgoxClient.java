@@ -19,6 +19,11 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.bitcoinrt.server.Broadcaster;
+
+/**
+ * A stub implementation of an MtGoxSource that produces messages at fixed intervals.
+ */
 public class StubMtgoxClient extends AbstractMtgoxClient {
 
 	private ExecutorService executor;
@@ -26,8 +31,12 @@ public class StubMtgoxClient extends AbstractMtgoxClient {
 	private boolean shuttingDown = false;
 
 
+	public StubMtgoxClient(Broadcaster broadcaster) {
+		super(broadcaster);
+	}
+
 	@Override
-	public void start() throws Exception {
+	public void start() {
 
 		this.executor = Executors.newSingleThreadExecutor();
 
@@ -62,10 +71,9 @@ public class StubMtgoxClient extends AbstractMtgoxClient {
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		logger.debug("Shutting down stub MtGox service...");
 		this.shuttingDown = true;
 		this.executor.shutdownNow();
 	}
-
 }

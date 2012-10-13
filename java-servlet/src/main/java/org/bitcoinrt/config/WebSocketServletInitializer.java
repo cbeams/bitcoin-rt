@@ -17,13 +17,12 @@
 package org.bitcoinrt.config;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import org.bitcoinrt.client.AbstractMtgoxClient;
 import org.bitcoinrt.client.StubMtgoxClient;
+import org.bitcoinrt.server.Broadcaster;
 import org.bitcoinrt.server.TomcatBitcoinServlet;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -32,36 +31,19 @@ public class WebSocketServletInitializer implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
-		final AbstractMtgoxClient mtgoxClient = new StubMtgoxClient();
-//		final AbstractMtgoxClient mtgoxClient = new JettyMtgoxClient();
-//		final AbstractMtgoxClient mtgoxClient = new AsyncHttpClientMtgoxClient();
+		TomcatBitcoinServlet servlet = new TomcatBitcoinServlet();
 
-		Dynamic servlet = servletContext.addServlet("ws", new TomcatBitcoinServlet(mtgoxClient));
-		servlet.addMapping("/tomcat");
-		servlet.setLoadOnStartup(1);
+		Dynamic registration = servletContext.addServlet("ws", servlet);
+		registration.addMapping("/tomcat");
+		registration.setLoadOnStartup(1);
 
-		servletContext.addListener(new ServletContextListener() {
+		Broadcaster broadcaster = servlet;
 
-			@Override
-			public void contextInitialized(ServletContextEvent sce) {
-				try {
-					mtgoxClient.start();
-				}
-				catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
+		AbstractMtgoxClient mtgoxClient = new StubMtgoxClient(broadcaster);
+//		AbstractMtgoxClient mtgoxClient = new JettyMtgoxClient(broadcaster);
+//		AbstractMtgoxClient mtgoxClient = new AsyncHttpClientMtgoxClient(broadcaster);
 
-			@Override
-			public void contextDestroyed(ServletContextEvent sce) {
-				try {
-					mtgoxClient.stop();
-				}
-				catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
+		servletContext.addListener(new MtGoxContextListener(mtgoxClient));
 	}
 
 }
