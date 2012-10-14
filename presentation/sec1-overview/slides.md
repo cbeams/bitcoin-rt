@@ -13,40 +13,50 @@
 * Broad, pragmatic perspective
 * Special emphasis on Java
 
-!SLIDE bullets
-# Source
-
-* presentation source<br> [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
-* bitcoin-rt demo source<br> [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
+!SLIDE
+# This Presentation
+## [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
 
 !SLIDE subsection
-# WebSockets ... 101
+# WebSockets ... <i>101</i>
 
-!SLIDE smaller
-# WebSockets ... 101
-      0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-     +-+-+-+-+-------+-+-------------+-------------------------------+
-     |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
-     |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
-     |N|V|V|V|       |S|             |   (if payload len==126/127)   |
-     | |1|2|3|       |K|             |                               |
-     +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
-     |     Extended payload length continued, if payload len == 127  |
-     + - - - - - - - - - - - - - - - +-------------------------------+
-     |                               |Masking-key, if MASK set to 1  |
-     +-------------------------------+-------------------------------+
-     | Masking-key (continued)       |          Payload Data         |
-     +-------------------------------- - - - - - - - - - - - - - - - +
-     :                     Payload Data continued ...                :
-     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
-     |                     Payload Data continued ...                |
-     +---------------------------------------------------------------+
+!SLIDE bullets incremental
+# The Problem
+* Some web apps need two-way communication / rapid updates
+* AJAX and Comet techniques can amount to an <br/>"abuse of HTTP"
 
-[http://www.ietf.org/rfc/rfc6455.txt](http://www.ietf.org/rfc/rfc6455.txt)
+!SLIDE bullets incremental
+# The Problem
+* Too many connections
+* Too much overhead
+* Too great a burden on the client
+
+!SLIDE bullets incremental
+# The Usual Suspects
+* Trading
+* Chat
+* Gaming
+* Collaboration
+
+.notes :
+* show Asana
+
+!SLIDE
+# The Goal
+
+## _"provide a mechanism for browser-based applications that need two-way communication with servers that does not rely on opening multiple HTTP connections"_
+
+\- [RFC 6455](http://www.ietf.org/rfc/rfc2616.txt), <i>The WebSocket Protocol</i>
+
+!SLIDE bullets
+# The Approach
+* Two-way messaging over a single connection
+* Layer on TCP
+* Not HTTP, but uses HTTP to bootstrap
+* Extremely low-overhead
 
 !SLIDE small
-# WebSockets ... 101
+# The WebSocket Handshake
 
     GET /mychat HTTP/1.1
     Host: server.example.com
@@ -63,10 +73,72 @@
     Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
     Sec-WebSocket-Protocol: chat
 
-!SLIDE small
-## something about original intent of 101/Upgrade?
+.notes :
+TODO: use actual example from demos or from websockets.org
+* mention something about original intent of 101/Upgrade, i.e. for upgrading
+to newer versions of HTTP, not necessarily another protocol entirely.
 
-## [http://www.ietf.org/rfc/rfc2616.txt](http://www.ietf.org/rfc/rfc2616.txt)
+!SLIDE smaller
+# What's in a Frame?
+
+         0                   1                   2                   3
+         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+        +-+-+-+-+-------+-+-------------+-------------------------------+
+        |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+        |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+        |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+        | |1|2|3|       |K|             |                               |
+        +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+        |     Extended payload length continued, if payload len == 127  |
+        + - - - - - - - - - - - - - - - +-------------------------------+
+        |                               |Masking-key, if MASK set to 1  |
+        +-------------------------------+-------------------------------+
+        | Masking-key (continued)       |          Payload Data         |
+        +-------------------------------- - - - - - - - - - - - - - - - +
+        :                     Payload Data continued ...                :
+        + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+        |                     Payload Data continued ...                |
+        +---------------------------------------------------------------+
+
+[http://www.ietf.org/rfc/rfc6455.txt](http://www.ietf.org/rfc/rfc6455.txt)
+
+!SLIDE subsection
+# `bitcoin-rt`
+
+!SLIDE center
+![bitcoin-rt.png](bitcoin-rt.png)
+
+!SLIDE bullets incremental
+# `bitcoin-rt`
+* monitor [Bitcoin](http://weusecoins.com) transactions in real time
+* based on original [http://bitcoinmonitor.com](http://bitcoinmonitor.com)
+* WebSockets instead of long polling
+* [d3.js](TODO) instead of JQuery UI
+* MongoDB for persistence
+
+.notes :
+* briefly explain bitcoin
+* actually show bitcoinmonitor, show long-polling with chrome dev tools
+* start up
+
+!SLIDE bullets
+# `bitcoin-rt`
+## implementations in
+* Node.js
+* Node.js + [SockJS](TODO)
+* Java + [Tomcat native WebSocket API](TODO)
+* Java + [Atmosphere](TODO)
+* Java + [Vert.x](TODO)
+
+!SLIDE bullets
+# demo source
+## [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
+
+!SLIDE subsection
+# `bitcoin-rt: Node.js demo`
+.notes :
+* show mongod running
+* show client code
 
 !SLIDE center
 # Browser Support
