@@ -1,9 +1,9 @@
 !SLIDE cover
-# Intro to WebSockets #
+# Intro to WebSockets
 
-## Chris Beams ##
-## Gunnar Hillert ##
-## Rossen Stoyanchev ##
+## Chris Beams
+## Gunnar Hillert
+## Rossen Stoyanchev
 
 !SLIDE bullets
 # Objective
@@ -68,19 +68,19 @@
 
 ## [http://www.ietf.org/rfc/rfc2616.txt](http://www.ietf.org/rfc/rfc2616.txt)
 
-!SLIDE full-page
+!SLIDE center
 # Browser Support
 ![can-i-use-websockets.png](can-i-use-websockets.png)
 
-!SLIDE full-page
+!SLIDE center
 # Browser Share (World-Wide)
 ![browser-world-wide.jpg](browser-world-wide.jpg)
 
-!SLIDE full-page
+!SLIDE center
 # Browser Share (China)
 ![browser-china.jpg](browser-china.jpg)
 
-!SLIDE full-page
+!SLIDE center
 # Browser Versions
 ![browser-version.jpg](browser-versions.jpg)
 
@@ -120,6 +120,4 @@ Peter Lubbers<br><br>
 * Heartbeat ("i'm still here!")
 * Message delivery guarantee
 * Buffering
-
-
 
