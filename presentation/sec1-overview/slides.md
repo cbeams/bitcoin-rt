@@ -16,8 +16,8 @@
 !SLIDE bullets
 # Source
 
-* presentation source [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
-* bitcoin-rt demo source [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
+* presentation source<br> [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
+* bitcoin-rt demo source<br> [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
 
 !SLIDE subsection
 # WebSockets ... 101
@@ -43,7 +43,7 @@
      |                     Payload Data continued ...                |
      +---------------------------------------------------------------+
 
-<div class="footnote">http://www.ietf.org/rfc/rfc6455.txt</div>
+[http://www.ietf.org/rfc/rfc6455.txt](http://www.ietf.org/rfc/rfc6455.txt)
 
 !SLIDE small
 # WebSockets ... 101
@@ -64,22 +64,23 @@
     Sec-WebSocket-Protocol: chat
 
 !SLIDE small
-something about original intent of 101/Upgrade?
-http://www.ietf.org/rfc/rfc2616.txt
+## something about original intent of 101/Upgrade?
 
-!SLIDE small center
+## [http://www.ietf.org/rfc/rfc2616.txt](http://www.ietf.org/rfc/rfc2616.txt)
+
+!SLIDE full-page
 # Browser Support
 ![can-i-use-websockets.png](can-i-use-websockets.png)
 
-!SLIDE small center
+!SLIDE full-page
 # Browser Share (World-Wide)
 ![browser-world-wide.jpg](browser-world-wide.jpg)
 
-!SLIDE small center
+!SLIDE full-page
 # Browser Share (China)
 ![browser-china.jpg](browser-china.jpg)
 
-!SLIDE small center
+!SLIDE full-page
 # Browser Versions
 ![browser-version.jpg](browser-versions.jpg)
 
@@ -92,9 +93,12 @@ http://www.ietf.org/rfc/rfc2616.txt
 
 !SLIDE quote
 # Proxy Traversal
-Today, most transparent proxy servers will not yet be familiar with the Web Socket protocol and these proxy servers will be unable to support the Web Socket protocol
+_"Today, most transparent proxy servers will not yet be<br>
+familiar with the Web Socket protocol and these proxy servers<br>
+will be unable to support the Web Socket protocol"_
 
-<div class="footnote">Peter Lubbers - http://www.infoq.com/articles/Web-Sockets-Proxy-Servers</div>
+Peter Lubbers<br><br>
+[http://www.infoq.com/articles/Web-Sockets-Proxy-Servers](http://www.infoq.com/articles/Web-Sockets-Proxy-Servers)
 
 !SLIDE small bullets incremental
 # A Few Rules of Thumb

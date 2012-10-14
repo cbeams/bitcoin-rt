@@ -10,7 +10,7 @@
 !SLIDE small
 # More Than Just WebSocket
 
-!SLIDE small center
+!SLIDE full-page
 # SockJS Transports
 ![sockjs-transports.png](sockjs-transports.png)
 
