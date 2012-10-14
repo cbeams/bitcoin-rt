@@ -16,8 +16,8 @@
 		<level value="INFO" />
 	</logger>
 
-	<logger name="org.bitcoinrt.client">
-		<level value="INFO" />
+	<logger name="org.bitcoinrt">
+		<level value="DEBUG" />
 	</logger>
 	<logger name="org.apache">
 		<level value="INFO" />

@@ -18,7 +18,8 @@ package org.bitcoinrt.atmosphere.config;
 import java.util.List;
 
 import org.bitcoinrt.atmosphere.AtmosphereArgumentResolver;
-import org.bitcoinrt.client.AsyncHttpClientMtgoxClient;
+import org.bitcoinrt.client.AbstractMtgoxClient;
+import org.bitcoinrt.client.StubMtgoxClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -61,8 +62,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public AsyncHttpClientMtgoxClient mtgoxClient() {
-		return new AsyncHttpClientMtgoxClient();
+	public AbstractMtgoxClient mtgoxClient() {
+//		return new AsyncHttpClientMtgoxClient();
+		return new StubMtgoxClient();
 	}
 
 }

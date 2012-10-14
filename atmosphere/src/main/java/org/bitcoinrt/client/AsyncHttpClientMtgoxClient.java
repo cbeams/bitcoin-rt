@@ -16,9 +16,8 @@
 
 package org.bitcoinrt.client;
 
-import java.io.IOException;
-
-import org.springframework.beans.factory.InitializingBean;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
@@ -30,25 +29,39 @@ import com.ning.http.client.websocket.WebSocketUpgradeHandler;
  *
  * @see https://github.com/sonatype/async-http-client
  */
-public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient implements InitializingBean {
+public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient {
 
 	private final AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 
-	public void start() throws IOException {
-		MtgoxWebSocketListener listener = new MtgoxWebSocketListener();
+
+	@PostConstruct
+	public void start() {
 		WebSocketUpgradeHandler.Builder builder = new WebSocketUpgradeHandler.Builder();
-		builder.addWebSocketListener(listener);
-		this.asyncHttpClient.prepareGet(MTGOX_URL).execute(builder.build());
+		builder.addWebSocketListener(new MtgoxWebSocketListener());
+		WebSocketUpgradeHandler handler = builder.build();
+		try {
+			this.asyncHttpClient.prepareGet(MTGOX_URL).execute(handler).get();
+		}
+		catch (Exception ex) {
+			logger.error("Failed to execute WebSocketUpgradeHandler", ex);
+		}
+	}
+
+	@PreDestroy
+	public void stop() {
+		if (this.asyncHttpClient != null) {
+			this.asyncHttpClient.close();
+		}
 	}
 
 	private class MtgoxWebSocketListener extends DefaultWebSocketListener {
 
 		@Override
-		public void onOpen(WebSocket websocket) {
+		public void onOpen(WebSocket ws) {
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
-			websocket.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
-			websocket.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
+			ws.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
+			ws.sendTextMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
 			logger.debug("Waiting for messages...");
 		}
 
@@ -58,7 +71,7 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient implements I
 		}
 
 		@Override
-		public void onClose(WebSocket websocket) {
+		public void onClose(WebSocket ws) {
 			logger.debug("Disconnected from {}", MTGOX_URL);
 		}
 
@@ -66,11 +79,6 @@ public class AsyncHttpClientMtgoxClient extends AbstractMtgoxClient implements I
 		public void onError(Throwable t) {
 			logger.debug("Error from {}: {}", MTGOX_URL, t.getMessage());
 		}
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		start();
 	}
 
 }

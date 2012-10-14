@@ -22,7 +22,8 @@ public class MainVerticle extends Verticle {
 	@Override
 	public void start() throws Exception {
 		container.deployVerticle(BitcoinServerVerticle.class.getName());
-		container.deployVerticle(MtgoxClientVerticle.class.getName());
+//		container.deployVerticle(MtgoxClientVerticle.class.getName());
+		container.deployVerticle(StubMtgoxClientVerticle.class.getName());
 	}
 
 }

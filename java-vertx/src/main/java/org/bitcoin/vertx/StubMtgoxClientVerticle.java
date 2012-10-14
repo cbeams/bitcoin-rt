@@ -13,31 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bitcoinrt.client;
+package org.bitcoin.vertx;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.bitcoinrt.server.Broadcaster;
+import org.vertx.java.core.json.JsonObject;
+import org.vertx.java.deploy.Verticle;
 
 /**
  * A "stub" MtGox client that produces messages at fixed intervals.
  */
-public class StubMtgoxClient extends AbstractMtgoxClient {
+public class StubMtgoxClientVerticle extends Verticle {
 
 	private ExecutorService executor;
 
 	private boolean shuttingDown = false;
 
 
-	public StubMtgoxClient(Broadcaster broadcaster) {
-		super(broadcaster);
-	}
-
 	@Override
-	public void start() {
-
+	public void start() throws Exception {
 		this.executor = Executors.newSingleThreadExecutor();
 
 		this.executor.submit(new Runnable() {
@@ -55,25 +51,29 @@ public class StubMtgoxClient extends AbstractMtgoxClient {
 					long timestamp = (long) (Math.floor(new Date().getTime() / 1000));
 					double amount = Math.floor(Math.random() * 20);
 					String message = String.format(expression, amount, timestamp);
-					onMessage(message);
+
+					JsonObject jsonObject = new JsonObject(message);
+					JsonObject trade = jsonObject.getObject("trade");
+
+					vertx.eventBus().publish("bitcoin.trades", trade);
 
 					try {
 						Thread.sleep(7000);
 					}
 					catch (InterruptedException ex) {
-						logger.debug("Stub MtGox service interrupted");
+						container.getLogger().debug("Stub MtGox service interrupted");
 					}
 				}
-				logger.debug("Stub MtGox service stopped");
+				container.getLogger().debug("Stub MtGox service stopped");
 			}
 		});
-
 	}
 
 	@Override
-	public void stop() {
-		logger.debug("Shutting down stub MtGox service...");
+	public void stop() throws Exception {
+		container.getLogger().debug("Shutting down stub MtGox service...");
 		this.shuttingDown = true;
 		this.executor.shutdownNow();
 	}
+
 }
