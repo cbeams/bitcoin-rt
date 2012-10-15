@@ -165,12 +165,9 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 
 !SLIDE quote
 # Proxy Traversal
-_"Today, most transparent proxy servers will not yet be<br>
-familiar with the Web Socket protocol and these proxy servers<br>
-will be unable to support the Web Socket protocol"_
+## _"Today, most transparent proxy servers will not yet be familiar with the Web Socket protocol and these proxy servers will be unable to support the Web Socket protocol"_
 
-Peter Lubbers<br><br>
-[http://www.infoq.com/articles/Web-Sockets-Proxy-Servers](http://www.infoq.com/articles/Web-Sockets-Proxy-Servers)
+\- Peter Lubbers, in a 2010 [InfoQ article](http://www.infoq.com/articles/Web-Sockets-Proxy-Servers)
 
 !SLIDE small bullets incremental
 # A Few Rules of Thumb
