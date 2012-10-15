@@ -148,17 +148,17 @@
 * onerror
 * onclose
 
-!SLIDE smaller
+!SLIDE
 # Code Sample
 
-	@@@ java
-	var socket = new WebSocket(
-		'ws://localhost:8080/bitcoin-java-servlet/tomcat');
-	...
-	socket.onmessage = function(event) {
-	      console.log(event.data);
-	      var trade = JSON.parse(event.data);
-	      trade.date = trade.date * 1000;
-	      trades.push(trade);
-	    };
-	...
+    @@@ java
+    var socket = new WebSocket(
+      'ws://localhost:8080/bitcoin-java-servlet/tomcat');
+    ...
+    socket.onmessage = function(event) {
+          console.log(event.data);
+          var trade = JSON.parse(event.data);
+          trade.date = trade.date * 1000;
+          trades.push(trade);
+        };
+    ...
