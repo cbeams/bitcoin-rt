@@ -54,10 +54,5 @@ node bitcoind.js
 open http://localhost:1337
 ```
 
-Oh, and bitcoinmonitor is a CPU hog. If you hear your fans spinning up, it's
-not bitcoin-rt's fault. Close the bitcoinmonitor window at that point. Data
-should be seen and not heard.
-
 [mtgox]: https://mtgox.com
 [homebrew]: http://mxcl.github.com/homebrew
-
