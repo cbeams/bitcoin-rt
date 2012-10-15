@@ -4,20 +4,20 @@
 !SLIDE small incremental bullets
 # Node.js
 * <a href="https://npmjs.org/package/websocket">`Websocket` plugin</a>
-* <a href="http://socket.io/">socket.io</a>
-* <a href="http://sockjs.org">sockJS</a>
+* <a href="http://socket.io/">Socket.IO</a>
+* <a href="http://sockjs.org">SockJS</a>
 
 !SLIDE small
-# More Than Just WebSocket
+# More Than Just WebSockets
 
-!SLIDE full-page
+!SLIDE center
 # SockJS Transports
 ![sockjs-transports.png](sockjs-transports.png)
 
 !SLIDE small bullets incremental
-# socket.io vs sockJS
-* `socket.io` more popular
-* `sockJS` focused on transports, horizontal scalability
+# Socket.IO vs SockJS
+* `Socket.IO` more popular
+* `SockJS` focused on transports, horizontal scalability
 * <a href="https://groups.google.com/forum/#!topic/sockjs/lgzxVnlth54/discussion">Discussion thread</a>
 
 !SLIDE small bullets incremental

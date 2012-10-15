@@ -1,7 +1,7 @@
-## Node.js with sockJS bitcoint-rt
+## Node.js with SockJS bitcoint-rt
 
 An implementation backed by Node and Mongo on the server side and using
-sockJS for exchanging messages between client and server.
+SockJS for exchanging messages between client and server.
 
 By default the sample runs with a "stub" MtGox service. To switch to the
 live version, edit bitcoind.js. If you don't see any trades on the graph

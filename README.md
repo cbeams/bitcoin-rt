@@ -13,8 +13,8 @@ they wish to see, hover for detailed transaction data, and ideally provide a
 which kinds of transactions they wish to see, which exchanges, etc.
 
 A number of functionally equivalent implementations are available in the various
-sub-directories including Node.js, Node.js with sockJS, Tomcat-based Servlet,
-vert.x, and Atmopshere.
+sub-directories including Node.js, Node.js with SockJS, Tomcat-based Servlet,
+vert.x, and Atmosphere. See the README files in each for setup instructions.
 
 [d3]: http://d3js.org
 [bitcoin]: http://bitcoin.org

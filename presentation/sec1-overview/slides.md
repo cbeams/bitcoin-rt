@@ -189,7 +189,7 @@ Peter Lubbers<br><br>
 !SLIDE small bullets incremental
 # A New Set of Challenges
 * Keep-alive ("ping!")
-* Heartbeat ("i'm still here!")
+* Heartbeat ("I'm still here!")
 * Message delivery guarantee
 * Buffering
 
