@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+				"http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<!-- Configuration file for UrlRewriteFilter http://www.tuckey.org/urlrewrite/ -->
+<urlrewrite use-query-string="true">
+	<rule>
+		<from>^/bitcoin/(.*)$</from>
+		<to type="proxy" last="true">http://localhost:7777/bitcoin/$1</to>
+	</rule>
+</urlrewrite>

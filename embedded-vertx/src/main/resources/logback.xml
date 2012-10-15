@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %5p | %-55logger{55} [%t] %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.springframework">
+		<level value="INFO" />
+	</logger>
+
+	<logger name="org.tuckey">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="org.bitcoinrt">
+		<level value="INFO" />
+	</logger>
+	<logger name="org.apache">
+		<level value="INFO" />
+	</logger>
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

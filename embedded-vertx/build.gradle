@@ -11,16 +11,15 @@ repositories {
 
 eclipse {
   project {
-    name = 'bitcoin-atmosphere'
+    name = 'bitcoin-vertx-embedded'
   }
 }
 
-war.baseName = 'bitcoin-atmosphere'
+war.baseName = 'bitcoin-vertx-embedded'
 
 dependencies {
 
-	compile('com.jayway.jsonpath:json-path:0.8.1')
-	compile('com.ning:async-http-client:1.7.4')
+	compile('org.vert-x:vertx-platform:1.2.3.final')
 	compile('org.springframework:spring-webmvc:3.1.2.RELEASE')
 	compile('org.atmosphere:atmosphere-runtime:1.0.0')
 	compile('cglib:cglib:2.2.2')
@@ -39,6 +38,9 @@ dependencies {
 	runtime('org.slf4j:jcl-over-slf4j:1.6.4')
 
 	testCompile('junit:junit:4.10')
+
+	compile('org.tuckey:urlrewritefilter:4.0.3')
+	compile('commons-httpclient:commons-httpclient:3.1')
 }
 
 task wrapper(type: Wrapper) {
