@@ -24,8 +24,6 @@
 * XHR long-polling / XHR multipart-replace / XHR Streaming
 * htmlfile ActiveX Object
 * Server-sent events (SSE) - Part of HTML5/W3C
-* Java Applets
-* Macromedia/Adobe Flash (RTMP Protocol)
 
 !SLIDE small incremental bullets
 # Path to Websockets
@@ -47,14 +45,15 @@
 
 * 2010-May - hybi-00 - Same as hixie-76
 * 2011-April - hybi-07 - Firefox 6
-* 2011-Dec - RFC6455
+* 2011-Dec - **RFC6455**
 
 !SLIDE small incremental bullets
 # Websocket Protocol Details
 
 * TCP-based protocol
-* HTTP used solely for upgrade request
+* HTTP used solely for upgrade request (Status Code *101*)
 * Bi-directional, full-duplex
+* Data Frames can be **Text** (UTF-8) or arbitrary **Binary** data
 
 !SLIDE center 
 # Websocket Control Frames
@@ -76,22 +75,30 @@
 !SLIDE small incremental bullets
 # Close Frame
 
-* 
+* Terminates WebSocket connection
+* Can contain a body (UTF-8 encoded)
+* Defines a set of Status Codes, e.g:
+* 1000 = normal closore
+* 1001 = endpoint is "going away"
 
 !SLIDE small incremental bullets
 # Ping + Pong Frame
 
-* Serves as keepalive
+* Serves as keepalive (Ping followed by Pong)
 * Check whether the remote endpoint is still responsive
+* Can be sent at any time (Websocket established, before close)
+* Just Pongs (unsolicited) = unidirectional heartbeat
+
+!SLIDE small incremental bullets**
+# Extensions
 
 !SLIDE small incremental bullets
-# Pong Frame
-
-*
+# Sub-Protocols
 
 !SLIDE small bullets
 
-# HTML WebSockets = W3C API and IETF Protocol
+# HTML5 WebSockets = 
+# W3C API + IETF Protocol
 
 !SLIDE small bullets
 # RFC 6455 - The WebSocket Protocol
@@ -155,12 +162,3 @@
 	      trades.push(trade);
 	    };
 	...
-
-!SLIDE small bullets
-# JSR 356 - Java API for Web Socket
-* Early Draft Review: v006 Sep 2012
-* http://www.jcp.org/en/jsr/detail?id=356
-
-* http://java.net/jira/browse/WEBSOCKET_SPEC
-* Being added to Tomcat
-
