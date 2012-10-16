@@ -46,9 +46,3 @@ products are a good example to bring up .. the fact that they recommend using
 something on top of WebSockets; probably X number of years from now we won't be
 using WebSockets direclty
 CQRS
-
-!SLIDE small incremental bullets
-# Blah
-* blah
-* blah
-* blah
