@@ -18,7 +18,7 @@
 ## [http://cbeams.github.com/bitcoin-rt](http://cbeams.github.com/bitcoin-rt)
 
 !SLIDE subsection
-# WebSockets ... <i>101</i>
+# WebSocket 101
 
 !SLIDE bullets incremental
 # The Problem
@@ -37,6 +37,7 @@
 * Chat
 * Gaming
 * Collaboration
+* Visualization
 
 .notes :
 * show Asana
@@ -48,7 +49,7 @@
 
 \- [RFC 6455](http://www.ietf.org/rfc/rfc2616.txt), <i>The WebSocket Protocol</i>
 
-!SLIDE bullets
+!SLIDE bullets incremental
 # The Approach
 * Two-way messaging over a single connection
 * Layer on TCP
@@ -56,22 +57,16 @@
 * Extremely low-overhead
 
 !SLIDE small
-# The WebSocket Handshake
+# The WebSocket HTTP Handshake
 
-    GET /mychat HTTP/1.1
+    GET /chat HTTP/1.1
     Host: server.example.com
     Upgrade: websocket
     Connection: Upgrade
-    Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
-    Sec-WebSocket-Protocol: chat
-    Sec-WebSocket-Version: 13
-    Origin: http://example.com
 
     HTTP/1.1 101 Switching Protocols
     Upgrade: websocket
     Connection: Upgrade
-    Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
-    Sec-WebSocket-Protocol: chat
 
 .notes :
 TODO: use actual example from demos or from websockets.org
@@ -102,34 +97,42 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 
 [http://www.ietf.org/rfc/rfc6455.txt](http://www.ietf.org/rfc/rfc6455.txt)
 
-!SLIDE subsection
+!SLIDE subsection bullets incremental
+ <img src="bitcoin.jpg" height="200"/>
 # `bitcoin-rt`
+* visualize [Bitcoin](http://weusecoins.com) transactions in real time
+* inspired by original [bitcoinmonitor.com](http://bitcoinmonitor.com)
+
 
 !SLIDE center
-![bitcoin-rt.png](bitcoin-rt.png)
-
-!SLIDE bullets incremental
-# `bitcoin-rt`
-* monitor [Bitcoin](http://weusecoins.com) transactions in real time
-* based on original [http://bitcoinmonitor.com](http://bitcoinmonitor.com)
-* WebSockets instead of long polling
-* [d3.js](TODO) instead of JQuery UI
-* MongoDB for persistence
+![bitcoinmonitor.png](bitcoinmonitor.png)
 
 .notes :
 * briefly explain bitcoin
 * actually show bitcoinmonitor, show long-polling with chrome dev tools
 * start up
 
-!SLIDE bullets
-# `bitcoin-rt` implementations
-* Node.js
-* Node.js + [SockJS](TODO)
-* Java + [Tomcat native WebSocket API](TODO)
-* Java + [Atmosphere](TODO)
-* Java + [Vert.x](TODO)
+!SLIDE bullets incremental
+# `bitcoin-rt vs bitcoinmonitor`
+* WebSockets instead of [long polling](http://en.wikipedia.org/wiki/Push_technology#Long_polling)
+* [d3.js](http://d3js.org) instead of [JQuery UI](http://jqueryui.com/)
+* [MongoDB](http://www.mongodb.org) for persistence
+
+!SLIDE center
+![bitcoin-rt.png](bitcoin-rt.png)
 
 !SLIDE bullets
+# `bitcoin-rt` implementations
+* [Node.js](http://nodejs.org)
+* Node.js + [SockJS](http://sockjs.org)
+* Java + [Tomcat native WebSocket API](http://tomcat.apache.org/tomcat-7.0-doc/web-socket-howto.html)
+* Java + [Atmosphere](https://github.com/Atmosphere/atmosphere#readme)
+* Java + [Vert.x](http://vertx.io)
+
+!SLIDE center
+![bitcoin-rt-source.png](bitcoin-rt-source.png)
+
+!SLIDE
 # demo source
 ## [http://github.com/cbeams/bitcoin-rt](http://github.com/cbeams/bitcoin-rt)
 
@@ -138,6 +141,17 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 .notes :
 * show mongod running
 * show client code
+
+!SLIDE bullets incremental
+# WebSocket benefits
+* more resource-efficient
+* lower-latency data
+* conceptually simpler
+
+!SLIDE bullets incremental
+# if WebSocket is so great...
+* Why does bitcoinmonitor use long polling?
+* What about [other sites](https://app.asana.com/0/2178923938044/2178923938044)?
 
 !SLIDE center
 # Browser Support
