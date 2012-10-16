@@ -156,11 +156,11 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 ![browser-version.jpg](browser-versions.jpg)
 
 !SLIDE small bullets incremental
-# Proxy Traversal
-* HTTP Proxies designed for document transfer
-* Not for streaming or idle connections
-* Indistinguishable from unresponsive HTTP server
-* Proxies may buffer unencrypted responses
+# HTTP Proxies
+* Content caching, internet connectivity, filtering
+* Can monitor or close connections, buffer unencrypted traffic
+* Designed for HTTP-based document transfer
+* Not for long-lived connections
 
 !SLIDE quote
 # Proxy Traversal
@@ -169,18 +169,25 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 \- Peter Lubbers, in a 2010 [InfoQ article](http://www.infoq.com/articles/Web-Sockets-Proxy-Servers)
 
 !SLIDE small bullets incremental
+# Upgrade Issues
+
+* Explicit proxies with HTTP Connect
+* Transparent proxies propagation of `Upgrade` header
+* Retaining the `Connection` header
+* WebSocket frames vs HTTP traffic
+
+!SLIDE small bullets incremental
 # A Few Rules of Thumb
 * `"wss:"` provides a much better chance of success
-* Browsers using explicit proxy will likely work
-* Transparent proxies can support WebSocket
-* but must be configured explicitly
+* Same for browsers using explicit proxies
+* Transparent proxies can support WebSocket<br> but must be configured explicitly
 
 !SLIDE small bullets incremental
 # Keeping Connections Alive
 * Internet inherently unreliable
 * Both server and client can go away
 * Wireless connection may fade out
-* ...
+* and so on
 
 !SLIDE small bullets incremental
 # A New Set of Challenges
