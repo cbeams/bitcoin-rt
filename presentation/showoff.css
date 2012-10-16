@@ -8,6 +8,11 @@
 */
 }
 
+.slide .center {
+  width: 1280px;
+  height: 720px;
+}
+
 .subsection h1 {
   color: white;
   background: #535353;

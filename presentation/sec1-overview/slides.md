@@ -122,8 +122,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 * start up
 
 !SLIDE bullets
-# `bitcoin-rt`
-## implementations in
+# `bitcoin-rt` implementations
 * Node.js
 * Node.js + [SockJS](TODO)
 * Java + [Tomcat native WebSocket API](TODO)
@@ -145,11 +144,11 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 ![can-i-use-websockets.png](can-i-use-websockets.png)
 
 !SLIDE center
-# Browser Share (World-Wide)
+# Browser Share World-Wide
 ![browser-world-wide.jpg](browser-world-wide.jpg)
 
 !SLIDE center
-# Browser Share (China)
+# Browser Share China
 ![browser-china.jpg](browser-china.jpg)
 
 !SLIDE center
@@ -161,7 +160,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 * HTTP Proxies designed for document transfer
 * Not for streaming or idle connections
 * Indistinguishable from unresponsive HTTP server
-* Proxies may also buffer unencrypted responses
+* Proxies may buffer unencrypted responses
 
 !SLIDE quote
 # Proxy Traversal
