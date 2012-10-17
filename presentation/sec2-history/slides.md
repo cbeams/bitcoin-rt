@@ -60,6 +60,21 @@
 * Bi-directional, full-duplex
 * Data Frames can be **Text** (UTF-8) or arbitrary **Binary** data
 
+!SLIDE small incremental bullets
+# WebSocket Schemes
+
+* Unencrypted: ws://
+* Encrypted: wss://
+* Use encrypted scheme
+
+!SLIDE small incremental bullets
+# Handshake
+
+* Request: **Sec-WebSocket-Key** Header
+* Response - 258EAFA5-E914-47DA-95CA-C5AB0DC85B11
+* Appended to key + SHA-1 + base64
+* **Sec-WebSocket-Accept** Header
+
 !SLIDE smaller
 # Websocket Protocol Details
 
@@ -142,13 +157,6 @@
 * Check whether the remote endpoint is still responsive
 * Can be sent at any time (Websocket established, before close)
 * Just Pongs (unsolicited) = unidirectional **heartbeat**
-
-!SLIDE small incremental bullets
-# WebSocket Schemes
-
-* Unencrypted: ws://
-* Encrypted: wss://
-* Use encrypted scheme
 
 !SLIDE small incremental bullets
 # Extensions
