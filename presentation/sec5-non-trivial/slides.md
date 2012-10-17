@@ -31,12 +31,12 @@
 * higher-level protocols
 * XMPP, AMQP, JMS
 
-!SLIDE bullets
+!SLIDE bullets incremental
 # Building a real app today
 * Commercial vendors have a lot to offer
 * Particularly ![kaazing-logo.png](kaazing-logo.png) ([blog](http://blog.kaazing.com), [websocket.org](http://www.websocket.org/))
 
-!SLIDE bullets
+!SLIDE bullets incremental
 # Predictions: Java
 * JSR-356 will be important
 * Frameworks have a big role to play
