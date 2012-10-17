@@ -3,7 +3,7 @@
 
 !SLIDE incremental bullets
 # Node.js
-* <a href="https://npmjs.org/package/websocket">`Websocket` library</a>
+* <a href="https://npmjs.org/package/websocket">`websocket` package</a>
 * <a href="http://socket.io/">Socket.IO</a>
 * <a href="http://sockjs.org">SockJS</a>
   

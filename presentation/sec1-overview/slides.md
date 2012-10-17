@@ -183,7 +183,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.
 \- Peter Lubbers, in a 2010 [InfoQ article](http://www.infoq.com/articles/Web-Sockets-Proxy-Servers)
 
 !SLIDE small bullets incremental
-# Upgrade Issues
+# Proxy Issues
 
 * Explicit proxies with HTTP Connect
 * Transparent proxies propagation of `Upgrade` header
