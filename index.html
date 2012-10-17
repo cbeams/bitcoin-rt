@@ -103,7 +103,7 @@
 <h2><a href="http://cbeams.github.com/bitcoin-rt">http://cbeams.github.com/bitcoin-rt</a></h2>
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="sec1-overview/slides/4">
-<h1>WebSockets ... <i>101</i></h1>
+<h1>WebSocket 101</h1>
 </div>
 </div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/5">
 <h1>The Problem</h1>
@@ -132,6 +132,7 @@
 <li>Chat</li>
 <li>Gaming</li>
 <li>Collaboration</li>
+<li>Visualization</li>
 </ul>
 
 
@@ -145,7 +146,7 @@
 
 <p>- <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 6455</a>, <i>The WebSocket Protocol</i></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets" ref="sec1-overview/slides/9">
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/9">
 <h1>The Approach</h1>
 
 <ul>
@@ -157,22 +158,16 @@
 
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="sec1-overview/slides/10">
-<h1>The WebSocket Handshake</h1>
+<h1>The WebSocket HTTP Handshake</h1>
 
-<pre><code>GET /mychat HTTP/1.1
+<pre><code>GET /chat HTTP/1.1
 Host: server.example.com
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
-Sec-WebSocket-Protocol: chat
-Sec-WebSocket-Version: 13
-Origin: http://example.com
 
 HTTP/1.1 101 Switching Protocols
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
-Sec-WebSocket-Protocol: chat
 </code></pre>
 
 <p class="notes">:
@@ -205,116 +200,156 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 
 <p><a href="http://www.ietf.org/rfc/rfc6455.txt">http://www.ietf.org/rfc/rfc6455.txt</a></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content subsection" ref="sec1-overview/slides/12">
-<h1><code>bitcoin-rt</code></h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/13">
-<p><img src="./file/sec1-overview/bitcoin-rt.png" alt="bitcoin-rt.png"/></p>
-</div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/14">
+</div><div class="slide" data-transition="none"><div class="content subsection bullets incremental" ref="sec1-overview/slides/12">
+<p> <img src="./file/sec1-overview/bitcoin.jpg" height="200"/></p>
+
 <h1><code>bitcoin-rt</code></h1>
 
 <ul>
-<li>monitor <a href="http://weusecoins.com">Bitcoin</a> transactions in real time</li>
-<li>based on original <a href="http://bitcoinmonitor.com">http://bitcoinmonitor.com</a></li>
-<li>WebSockets instead of long polling</li>
-<li><a href="TODO">d3.js</a> instead of JQuery UI</li>
-<li>MongoDB for persistence</li>
+<li>visualize <a href="http://weusecoins.com">Bitcoin</a> transactions in real time</li>
+<li>inspired by original <a href="http://bitcoinmonitor.com">bitcoinmonitor.com</a></li>
 </ul>
 
+</div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/13">
+<p><img src="./file/sec1-overview/bitcoinmonitor.png" alt="bitcoinmonitor.png"/></p>
 
 <p class="notes">:
 * briefly explain bitcoin
 * actually show bitcoinmonitor, show long-polling with chrome dev tools
 * start up</p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets" ref="sec1-overview/slides/15">
-<h1><code>bitcoin-rt</code></h1>
-
-<h2>implementations in</h2>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/14">
+<h1><code>bitcoin-rt vs bitcoinmonitor</code></h1>
 
 <ul>
-<li>Node.js</li>
-<li>Node.js + <a href="TODO">SockJS</a></li>
-<li>Java + <a href="TODO">Tomcat native WebSocket API</a></li>
-<li>Java + <a href="TODO">Atmosphere</a></li>
-<li>Java + <a href="TODO">Vert.x</a></li>
+<li>WebSockets instead of <a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling">long polling</a></li>
+<li><a href="http://d3js.org">d3.js</a> instead of <a href="http://jqueryui.com/">JQuery UI</a></li>
+<li><a href="http://www.mongodb.org">MongoDB</a> for persistence</li>
 </ul>
 
 </div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/15">
+<p><img src="./file/sec1-overview/bitcoin-rt.png" alt="bitcoin-rt.png"/></p>
+</div>
 </div><div class="slide" data-transition="none"><div class="content bullets" ref="sec1-overview/slides/16">
+<h1><code>bitcoin-rt</code> implementations</h1>
+
+<ul>
+<li><a href="http://nodejs.org">Node.js</a></li>
+<li>Node.js + <a href="http://sockjs.org">SockJS</a></li>
+<li>Java + <a href="http://tomcat.apache.org/tomcat-7.0-doc/web-socket-howto.html">Tomcat native WebSocket API</a></li>
+<li>Java + <a href="https://github.com/Atmosphere/atmosphere#readme">Atmosphere</a></li>
+<li>Java + <a href="http://vertx.io">Vert.x</a></li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/17">
+<p><img src="./file/sec1-overview/bitcoin-rt-source.png" alt="bitcoin-rt-source.png"/></p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="sec1-overview/slides/18">
 <h1>demo source</h1>
 
 <h2><a href="http://github.com/cbeams/bitcoin-rt">http://github.com/cbeams/bitcoin-rt</a></h2>
 </div>
-</div><div class="slide" data-transition="none"><div class="content subsection" ref="sec1-overview/slides/17">
+</div><div class="slide" data-transition="none"><div class="content subsection" ref="sec1-overview/slides/19">
 <h1><code>bitcoin-rt: Node.js demo</code></h1>
 
 <p class="notes">:
 * show mongod running
 * show client code</p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/18">
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/20">
+<h1>WebSocket benefits</h1>
+
+<ul>
+<li>more resource-efficient</li>
+<li>lower-latency data</li>
+<li>conceptually simpler</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec1-overview/slides/21">
+<h1>if WebSocket is so great...</h1>
+
+<ul>
+<li>Why does bitcoinmonitor use long polling?</li>
+<li>What about <a href="https://app.asana.com/0/2178923938044/2178923938044">other sites</a>?</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/22">
 <h1>Browser Support</h1>
 
 <p><img src="./file/sec1-overview/can-i-use-websockets.png" alt="can-i-use-websockets.png"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/19">
-<h1>Browser Share (World-Wide)</h1>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/23">
+<h1>Browser Share World-Wide</h1>
 
 <p><img src="./file/sec1-overview/browser-world-wide.jpg" alt="browser-world-wide.jpg"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/20">
-<h1>Browser Share (China)</h1>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/24">
+<h1>Browser Share China</h1>
 
 <p><img src="./file/sec1-overview/browser-china.jpg" alt="browser-china.jpg"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/21">
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec1-overview/slides/25">
 <h1>Browser Versions</h1>
 
 <p><img src="./file/sec1-overview/browser-versions.jpg" alt="browser-version.jpg"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/22">
-<h1>Proxy Traversal</h1>
+</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/26">
+<h1>HTTP Proxies</h1>
 
 <ul>
-<li>HTTP Proxies designed for document transfer</li>
-<li>Not for streaming or idle connections</li>
-<li>Indistinguishable from unresponsive HTTP server</li>
-<li>Proxies may also buffer unencrypted responses</li>
+<li>Content caching, internet connectivity, filtering</li>
+<li>Can monitor or close connections, buffer unencrypted traffic</li>
+<li>Designed for HTTP-based document transfer</li>
+<li>Not for long-lived connections</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content quote" ref="sec1-overview/slides/23">
+</div><div class="slide" data-transition="none"><div class="content quote" ref="sec1-overview/slides/27">
 <h1>Proxy Traversal</h1>
 
 <h2><em>"Today, most transparent proxy servers will not yet be familiar with the Web Socket protocol and these proxy servers will be unable to support the Web Socket protocol"</em></h2>
 
 <p>- Peter Lubbers, in a 2010 <a href="http://www.infoq.com/articles/Web-Sockets-Proxy-Servers">InfoQ article</a></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/24">
+</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/28">
+<h1>Proxy Issues</h1>
+
+<ul>
+<li>Explicit proxies with HTTP Connect</li>
+<li>Transparent proxies propagation of <code>Upgrade</code> header</li>
+<li>Retaining the <code>Connection</code> header</li>
+<li>WebSocket frames vs HTTP traffic</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/29">
 <h1>A Few Rules of Thumb</h1>
 
 <ul>
 <li><code>"wss:"</code> provides a much better chance of success</li>
-<li>Browsers using explicit proxy will likely work</li>
-<li>Transparent proxies can support WebSocket</li>
-<li>but must be configured explicitly</li>
-</ul>
+<li>Same for browsers using explicit proxies</li>
+<li>Transparent proxies can support WebSocket<br> but must be configured explicitly</br>
+</li>
 
+</ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/25">
+</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/30">
 <h1>Keeping Connections Alive</h1>
 
 <ul>
 <li>Internet inherently unreliable</li>
 <li>Both server and client can go away</li>
 <li>Wireless connection may fade out</li>
-<li>...</li>
+<li>and so on</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/26">
+</div><div class="slide" data-transition="none"><div class="content small bullets incremental" ref="sec1-overview/slides/31">
 <h1>A New Set of Challenges</h1>
 
 <ul>
@@ -357,7 +392,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 <ul>
 <li>XHR long-polling / XHR multipart-replace / XHR Streaming</li>
 <li>htmlfile ActiveX Object</li>
-<li>Server-sent events (SSE) - Part of HTML5/W3C</li>
+<li>Server-sent events (SSE) - Part of HTML5/W3C (EventSource)</li>
 </ul>
 
 </div>
@@ -394,7 +429,16 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/9">
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/9">
+<h1>RFC 6455 - The WebSocket Protocol</h1>
+
+<ul>
+<li>Final Version: Dec 2011</li>
+<li>http://tools.ietf.org/html/rfc6455</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/10">
 <h1>Websocket Protocol Details</h1>
 
 <ul>
@@ -405,12 +449,74 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content center" ref="sec2-history/slides/10">
+</div><div class="slide" data-transition="none"><div class="content smaller" ref="sec2-history/slides/11">
+<h1>Websocket Protocol Details</h1>
+
+<pre><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-------+-+-------------+-------------------------------+
+|F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+|I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+|N|V|V|V|       |S|             |   (if payload len==126/127)   |
+| |1|2|3|       |K|             |                               |
++-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+|     Extended payload length continued, if payload len == 127  |
++ - - - - - - - - - - - - - - - +-------------------------------+
+|                               |Masking-key, if MASK set to 1  |
++-------------------------------+-------------------------------+
+| Masking-key (continued)       |          Payload Data         |
++-------------------------------- - - - - - - - - - - - - - - - +
+:                     Payload Data continued ...                :
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+|                     Payload Data continued ...                |
++---------------------------------------------------------------+
+</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/12">
+<h1>Websocket Protocol Details</h1>
+
+<ul>
+<li><strong>FIN</strong> (1 bit) - Final fragment in a message</li>
+<li><strong>RSV</strong>1-3 (1 bit each) - Reserved for extensions</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/13">
+<h1>Websocket Protocol Details</h1>
+
+<ul>
+<li><strong>Opcode</strong> (4 bits) - Which type of payload</li>
+<li>Text frame, binary frame, control frames</li>
+<li>Continuation frame indicates data belongs to previous frame</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/14">
+<h1>Websocket Protocol Details</h1>
+
+<ul>
+<li><strong>Mask</strong> (1 bit)</li>
+<li>Clients must mask</li>
+<li>Minimize data sniffing + Proxy cache-poisoning</li>
+<li><strong>Masking-key</strong> (32bit) - Random (XOR) for each frame</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/15">
+<h1>Websocket Protocol Details</h1>
+
+<ul>
+<li><strong>Payload length</strong> (7, 16 or 64 bit) in bytes</li>
+<li><strong>Extension data</strong> + <strong>Application data</strong></li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec2-history/slides/16">
 <h1>Websocket Control Frames</h1>
 
 <p><img src="./file/sec2-history/pong.png" alt="pong"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/11">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/17">
 <h1>Websocket Control Frames</h1>
 
 <ul>
@@ -423,51 +529,31 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/12">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/18">
 <h1>Close Frame</h1>
 
 <ul>
 <li>Terminates WebSocket connection</li>
 <li>Can contain a body (UTF-8 encoded)</li>
 <li>Defines a set of Status Codes, e.g:</li>
-<li>1000 = normal closore</li>
+<li>1000 = normal closure</li>
 <li>1001 = endpoint is "going away"</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/13">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/19">
 <h1>Ping + Pong Frame</h1>
 
 <ul>
-<li>Serves as keepalive (Ping followed by Pong)</li>
+<li>Serves as <strong>keepalive</strong> (Ping followed by Pong)</li>
 <li>Check whether the remote endpoint is still responsive</li>
 <li>Can be sent at any time (Websocket established, before close)</li>
-<li>Just Pongs (unsolicited) = unidirectional heartbeat</li>
+<li>Just Pongs (unsolicited) = unidirectional <strong>heartbeat</strong></li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets**" ref="sec2-history/slides/14">
-<h1>Extensions</h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/15">
-<h1>Sub-Protocols</h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/16">
-<h1>HTML5 WebSockets =</h1>
-
-<h1>W3C API + IETF Protocol</h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/17">
-<h1>RFC 6455 - The WebSocket Protocol</h1>
-
-<ul>
-<li>Final Version: Dec 2011</li>
-<li>http://tools.ietf.org/html/rfc6455</li>
-</ul>
-
-</div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/18">
-<h1>RFC 6455 - WebSocket Schemes</h1>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/20">
+<h1>WebSocket Schemes</h1>
 
 <ul>
 <li>Unencrypted: ws://</li>
@@ -476,20 +562,18 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/19">
-<h1>Upgrade</h1>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/21">
+<h1>Extensions</h1>
 
 <ul>
-<li>?</li>
+<li>WebSocket Per-frame Compression (Draft)</li>
+<li>Multiplexing Extension (Draft)</li>
+<li>Extensions Header: Sec-WebSocket-Extensions</li>
+<li>Used in the opening handshake (HTTP)</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/20">
-<h1>RFC 6455 - The WebSocket Protocol</h1>
-
-<h2><a href="http://www.iana.org/assignments/websocket/websocket.xml">http://www.iana.org/assignments/websocket/websocket.xml</a></h2>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/21">
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/22">
 <h1>Multiplexing Extension (MUX) for WebSockets</h1>
 
 <ul>
@@ -498,18 +582,42 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/22">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/23">
+<h1>Sub-Protocols</h1>
+
+<ul>
+<li>Sub-Protocol Header: Sec-WebSocket-Protocol</li>
+<li>IANA Registry:</li>
+<li><a href="http://www.iana.org/assignments/websocket/websocket.xml">http://www.iana.org/assignments/websocket/websocket.xml</a></li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/24">
+<h1>HTML5 WebSockets =</h1>
+
+<h1>W3C API + IETF Protocol</h1>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/25">
 <h1>The WebSocket API</h1>
 
 <ul>
 <li>W3C Candidate Recommendation 20 Sep 2012</li>
-<li><p>http://www.w3.org/TR/websockets/</p></li>
-<li><p>Browser client-side API</p></li>
+<li><a href="http://www.w3.org/TR/websockets/">http://www.w3.org/TR/websockets/</a></li>
+<li>Browser client-side API</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/26">
+<h1>The WebSocket API</h1>
+
+<ul>
+<li>Binary data supported: <strong>Blob</strong> or <strong>ArrayBuffer</strong> format</li>
+<li>Can inspect extensions (read-only)</li>
 <li>No support for ping/pong frames</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/23">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/27">
 <h1>The <em>readyState</em> attribute</h1>
 
 <ul>
@@ -520,7 +628,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/24">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec2-history/slides/28">
 <h1>Event Handlers</h1>
 
 <ul>
@@ -531,7 +639,7 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="sec2-history/slides/25">
+</div><div class="slide" data-transition="none"><div class="content" ref="sec2-history/slides/29">
 <h1>Code Sample</h1>
 
 <pre class="sh_java"><code>var socket = new WebSocket(
@@ -540,10 +648,18 @@ to newer versions of HTTP, not necessarily another protocol entirely.</p>
 socket.onmessage = function(event) {
       console.log(event.data);
       var trade = JSON.parse(event.data);
-      trade.date = trade.date * 1000;
-      trades.push(trade);
+      ...
     };
 ...</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small bullets" ref="sec2-history/slides/30">
+<h1>JSR 356: Java API for WebSocket</h1>
+
+<ul>
+<li>Early Draft Review, Sep 2012</li>
+<li><a href="http://jcp.org/en/jsr/detail?id=356">http://jcp.org/en/jsr/detail?id=356</a></li>
+</ul>
+
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="sec3-non-java/slides/1">
 <h1>Non-Java Solutions</h1>
@@ -552,37 +668,41 @@ socket.onmessage = function(event) {
 <h1>Node.js</h1>
 
 <ul>
-<li><a href="https://npmjs.org/package/websocket"><code>Websocket</code> plugin</a></li>
+<li><a href="https://npmjs.org/package/websocket"><code>websocket</code> package</a></li>
 <li><a href="http://socket.io/">Socket.IO</a></li>
 <li><a href="http://sockjs.org">SockJS</a></li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="sec3-non-java/slides/3">
+</div><div class="slide" data-transition="none"><div class="content incremental bullets" ref="sec3-non-java/slides/3">
 <h1>More Than Just WebSockets</h1>
+
+<ul>
+<li>XHR streaming</li>
+<li>XHR long polling</li>
+<li>Hidden iframe</li>
+<li>Flash socket</li>
+<li>Polling</li>
+</ul>
+
 </div>
 </div><div class="slide" data-transition="none"><div class="content center" ref="sec3-non-java/slides/4">
+<h1>Socket.IO</h1>
+
+<p><img src="./file/sec3-non-java/socketio.png" alt="socketio.png"/></p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content center" ref="sec3-non-java/slides/5">
 <h1>SockJS Transports</h1>
 
 <p><img src="./file/sec3-non-java/sockjs-transports.png" alt="sockjs-transports.png"/></p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec3-non-java/slides/5">
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec3-non-java/slides/6">
 <h1>Socket.IO vs SockJS</h1>
 
 <ul>
 <li><code>Socket.IO</code> more popular</li>
 <li><code>SockJS</code> focused on transports, horizontal scalability</li>
 <li><a href="https://groups.google.com/forum/#!topic/sockjs/lgzxVnlth54/discussion">Discussion thread</a></li>
-</ul>
-
-</div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec3-non-java/slides/6">
-<h1>Ruby</h1>
-
-<ul>
-<li><a href="https://github.com/igrigorik/em-websocket">EM-WebScoket</a></li>
-<li><em>socket.io-rack</em></li>
-<li><em>sockJS-ruby</em></li>
 </ul>
 
 </div>
@@ -593,13 +713,21 @@ socket.onmessage = function(event) {
 <h1><a href="http://tomcat.apache.org/tomcat-7.0-doc/web-socket-howto.html">Tomcat</a></h1>
 
 <ul>
+<li><code>WebSocketServlet</code></li>
 <li>Since 7.0.27 (03/2012)</li>
 <li>Backport to 6.0.35 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52918">Issue 52918</a></li>
 <li>Fairly minimal, server-side only</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/3">
+</div><div class="slide" data-transition="none"><div class="content subsection" ref="sec4-java/slides/3">
+<h1><code>bitcoin-rt: Tomcat demo</code></h1>
+
+<p class="notes">:
+* show mongod running
+* show client code</p>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/4">
 <h1><a href="http://download.eclipse.org/jetty/stable-7/apidocs/org/eclipse/jetty/websocket/package-summary.html">Jetty</a></h1>
 
 <ul>
@@ -609,7 +737,7 @@ socket.onmessage = function(event) {
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/4">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/5">
 <h1><a href="http://antwerkz.com/glassfish-web-sockets-sample/">Glassfish</a></h1>
 
 <ul>
@@ -619,19 +747,19 @@ socket.onmessage = function(event) {
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/5">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/6">
 <h1>Other Implementations</h1>
 
 <ul>
-<li>Atmosphere (more on that shortly)</li>
-<li>jWebSocket</li>
-<li>Netty</li>
-<li>vert.x (<a href="https://github.com/cbeams/bitcoin-rt/tree/master/java-vertx">bitcoint-rt sample</a>)</li>
-<li>Grizzly</li>
+<li><a href="https://github.com/Atmosphere/atmosphere">Atmosphere</a></li>
+<li><a href="http://jwebsocket.org">jWebSocket</a></li>
+<li><a href="https://netty.io/">Netty</a></li>
+<li><a href="http://vertx.io/">vert.x</a></li>
+<li><a href="http://grizzly.java.net/">Grizzly</a></li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/6">
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/7">
 <h1>Client Side</h1>
 
 <ul>
@@ -643,79 +771,118 @@ socket.onmessage = function(event) {
 </ul>
 
 </div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/8">
+<h1>Java API for WebSocket (JSR-356)</h1>
+
+<ul>
+<li>Original discussion started in JSR-340 (Servlet 3.1)</li>
+<li>Later split out into separate spec</li>
+<li>Servlet spec will have an upgrade option</li>
+<li>JSR-356 will likely not depend on Servlet API</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/9">
+<h1>What's under discussion</h1>
+
+<ul>
+<li>Client and server-side API</li>
+<li>Use of annotations</li>
+<li>Support for extensions</li>
+<li>Security considerations</li>
+<li>Thread model</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec4-java/slides/10">
+<h1>Resources</h1>
+
+<ul>
+<li><a href="http://java.net/projects/websocket-spec/downloads/directory/Spec%20javadoc%20Drafts">All drafts so far</a></li>
+<li>The latest <a href="http://java.net/projects/websocket-spec/downloads/directory/Spec%20javadoc%20Drafts/v006-EDR">v006 early draft review</a></li>
+<li><a href="http://java.net/projects/websocket-spec/lists">Mailing list archives</a></li>
+</ul>
+
+</div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="sec5-non-trivial/slides/1">
 <h1>Building a Non-Trivial Application</h1>
 
 <p class="notes">: 15 min</p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="sec5-non-trivial/slides/2">
-<h1>Short-term considerations</h1>
-
-<p class="notes">:
-We've already mentioned the issues with raw websockets, therefore the immediate
-concern is fallback options, both of which we've already talked about. It's
-possible you can build an application with just the right constrains but it's a
-very narrow path, pretty unlikely. So you'll need fallback options and this
-helps to explain why there are commercial options as well. A slide on Kaazing at
-least for sure (fallback options?, jms/xmpp/amqp) and any others just listed
-(pusher?) Pusher is more than just websockets, it's also native notifications
-.. go to Jeremy's talk</p>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="sec5-non-trivial/slides/3">
-<h1>Advice</h1>
-
-<p class="notes">:
-advice for what to use today .. decision tree
-- if building internal applications with websocket browser support start with
-  your servlet container
-- if you need fallback options, it rules out most servlet containers (except
-  Jetty) .. leaves vert.x, atmosphere, cometd/jetty and non-java solution
-  connected via messaging</p>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="sec5-non-trivial/slides/4">
-<h1>Long-term considerations</h1>
-
-<p class="notes">:
-[long-term] Starting with JSON, imagine exchanging messages, there is one
-connection (it's all about efficiency) and many kinds of messages, how do you
-distinguish the type of message? Jackson has 'Jackson Polymorphic Deserialization'
-- markers that could be used but would you really do it that way?
-With remoting (like Flash/Flex) you're targetting a server-side object and that's
-provided as a service to you by the remoting technology; here we are on a lower
-level; with REST you have a protocol (HTTP method, headers, etc) clear use case
-that demonstrates the need for protocol; one some level the fact that Rabbit and
-ActiveMQ have provided stomp; Kaazing provides multiple protocols; it is quite
-predictable, this is a very low level mechanism; buffering of messages (client
-sends messages faster than server can process, client and server are temporarily
-disconnected, etc) transport vs application protocol .. lightweight pub-sub
-mechanism one protocol to rule them all or many? without any protocol the kind
-of interrop enabled by the WWW is unimaginable; the choice of websockets should
-be very conscious, understanding that you loose the HTTP verbs the Kaazing
-products are a good example to bring up .. the fact that they recommend using
-something on top of WebSockets; probably X number of years from now we won't be
-using WebSockets direclty
-CQRS</p>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec5-non-trivial/slides/5">
-<h1>Blah</h1>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec5-non-trivial/slides/2">
+<h1>A Few Conclusions</h1>
 
 <ul>
-<li>blah</li>
-<li>blah</li>
-<li>blah</li>
+<li>WebSocket technology is promising</li>
+<li>Not a silver bullet</li>
+<li>Complement to REST</li>
 </ul>
 
 </div>
-</div><div class="slide" data-transition="none"><div class="content subsection" ref="sec6-spring-users/slides/1">
-<h1>A Note To Spring Users</h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content small incremental bullets" ref="sec6-spring-users/slides/2">
-<h1>Blah</h1>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec5-non-trivial/slides/3">
+<h1>A Few Conclusions</h1>
 
 <ul>
-<li>blah</li>
-<li>blah</li>
-<li>blah</li>
+<li>Potential replacement for Comet techniques</li>
+<li>But the need for fallback options will persist</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec5-non-trivial/slides/4">
+<h1>A Few Conclusions</h1>
+
+<ul>
+<li>Integrating WebSockets into a real app is not yet trivial</li>
+<li>But now is the time to begin thinking about it</li>
+<li>"Pure WebSocket" applications in the wild unlikely</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec5-non-trivial/slides/5">
+<h1>Predictions</h1>
+
+<ul>
+<li>A consolidation of 'fallback protocols'</li>
+<li>Leading to wide adoption in various application frameworks</li>
+<li>SockJS currently the most <a href="https://github.com/sockjs/sockjs-protocol">promising effort</a></li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="sec5-non-trivial/slides/6">
+<h1>Many questions remain</h1>
+
+<ul>
+<li>usage patterns</li>
+<li>higher-level protocols</li>
+<li>XMPP, AMQP, JMS</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets" ref="sec5-non-trivial/slides/7">
+<h1>Building a real app today</h1>
+
+<ul>
+<li>Commercial vendors have a lot to offer</li>
+<li>Particularly <img src="./file/sec5-non-trivial/kaazing-logo.png" alt="kaazing-logo.png"/> (<a href="http://blog.kaazing.com">blog</a>, <a href="http://www.websocket.org/">websocket.org</a>)</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets" ref="sec5-non-trivial/slides/8">
+<h1>Predictions: Java</h1>
+
+<ul>
+<li>JSR-356 will be important</li>
+<li>Frameworks have a big role to play</li>
+<li>Atmosphere is there today</li>
+<li>Dedicated Spring support in consideration</li>
+</ul>
+
+</div>
+</div><div class="slide" data-transition="none"><div class="content bullets" ref="sec5-non-trivial/slides/9">
+<h1>More Info</h1>
+
+<ul>
+<li>Jeremy Grelle's Async session @2:45p</li>
 </ul>
 
 </div>
@@ -724,6 +891,7 @@ CQRS</p>
 
 <ul>
 <li><a href="http://twitter.com/cbeams">@cbeams</a> | <a href="http://twitter.com/ghillert">@ghillert</a> | <a href="http://twitter.com/rstoya05">@rstoya05</a></li>
+<li><a href="http://cbeams.github.com/bitcoin-rt">http://cbeams.github.com/bitcoin-rt</a></li>
 </ul>
 
 </div>
