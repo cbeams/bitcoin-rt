@@ -190,8 +190,12 @@
 						return;
 					}
 
-					result.date = result.date * 1000;
-					$.mynamespace.trades.push(result);
+					var trade = result.trade;
+
+				    trade.date = trade.date * 1000;
+				    console.log(trade);
+
+					$.mynamespace.trades.push(trade);
 
 				}
 

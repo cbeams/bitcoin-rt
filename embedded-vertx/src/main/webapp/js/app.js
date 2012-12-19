@@ -2,8 +2,8 @@
 
   var trades = [];
 
-  //var eb = new vertx.EventBus("http://localhost:7777/bitcoin")
-  var eb = new vertx.EventBus("http://localhost:9080/bitcoin-vertx-embedded/bitcoin")
+  var eb = new vertx.EventBus("http://localhost:7777/bitcoin")
+  //var eb = new vertx.EventBus("http://localhost:8080/bitcoin-vertx-embedded/bitcoin")
   eb.onopen = function () {
     console.log("Connected to bitcoin event bus");
     eb.registerHandler("bitcoin.trades", function (msg, replyTo) {

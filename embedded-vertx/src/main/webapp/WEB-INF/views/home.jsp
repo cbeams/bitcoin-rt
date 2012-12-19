@@ -103,6 +103,7 @@
       </div>
     </div>
 
+	<script type="text/javascript" src="${ctx}/js/jquery.js"></script>
     <script src="${ctx}/js/bootstrap.js"></script>
     <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
     <script src="${ctx}/js/vertxbus.js"></script>
