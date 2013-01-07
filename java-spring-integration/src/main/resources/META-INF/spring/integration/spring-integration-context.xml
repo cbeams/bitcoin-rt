@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-2.2.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int-ip:tcp-connection-factory id="ws"
+		type="server" port="18080"
+		using-nio="true"
+		so-timeout="600000"
+		interceptor-factory-chain="interceptors"
+		serializer="wsSerializer"
+		deserializer="wsSerializer" />
+
+	<bean id="wsSerializer" class="org.springframework.integration.x.ip.websocket.WebSocketSerializer">
+		<property name="server" value="true" />
+	</bean>
+
+	<bean id="interceptors" class="org.springframework.integration.ip.tcp.connection.TcpConnectionInterceptorFactoryChain">
+		<property name="interceptors">
+			<bean class="org.springframework.integration.x.ip.websocket.WebSocketTcpConnectionInterceptorFactory" />
+		</property>
+	</bean>
+
+	<bean id="broker" class="org.bitcoinrt.server.ConnectionBroker"/>
+
+	<int-ip:tcp-inbound-channel-adapter  connection-factory="ws" channel="subscriptionChannel" />
+	<int-ip:tcp-outbound-channel-adapter connection-factory="ws" channel="toBrowser" />
+
+	<int:channel id="toBrowser">
+		<int:interceptors>
+			<int:wire-tap channel="loggit"/>
+		</int:interceptors>
+	</int:channel>
+
+	<int:channel id="subscriptionChannel">
+		<int:interceptors>
+			<int:wire-tap channel="loggit"/>
+		</int:interceptors>
+	</int:channel>
+
+	<int:service-activator ref="broker" method="subscribe" input-channel="subscriptionChannel"/>
+
+	<int:logging-channel-adapter id="loggit" log-full-message="true"/>
+
+	<int:channel id="brokerChannel"/>
+
+	<int:splitter input-channel="brokerChannel" output-channel="toBrowser" ref="broker" method="createBroadCastMessages"/>
+
+	<beans profile="default">
+	 	<bean class="org.bitcoinrt.client.AsyncHttpClientMtgoxClient">
+			<constructor-arg ref="brokerChannel"/>
+		</bean>
+	</beans>
+
+	<beans profile="jetty">
+		<bean class="org.bitcoinrt.client.JettyMtgoxClient">
+			<constructor-arg ref="brokerChannel"/>
+		</bean>
+	</beans>
+
+	<beans profile="dummy">
+		<bean class="org.bitcoinrt.client.StubMtgoxClient">
+			<constructor-arg ref="brokerChannel"/>
+		</bean>
+	</beans>
+
+</beans>

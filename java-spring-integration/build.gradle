@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = 'org.bitcoinrt.Main'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+	maven { url 'http://repo.springsource.org/libs-release' }
+	mavenCentral()
+	mavenLocal()
+}
+
+eclipse {
+	project {
+		name = 'bitcoin-java-spring-integration'
+	}
+}
+
+dependencies {
+
+	compile('com.jayway.jsonpath:json-path:0.8.1')
+	compile('com.ning:async-http-client:1.7.4')
+	compile('org.eclipse.jetty:jetty-websocket:8.1.4.v20120524')
+	compile('org.springframework:spring-web:3.2.0.RELEASE')
+	compile('org.springintegration.ip.extensions:spring-integration-ip-extensions:0.1.0.BUILD-SNAPSHOT')
+
+	runtime('ch.qos.logback:logback-classic:1.0.1')
+	runtime('org.slf4j:jcl-over-slf4j:1.6.4')
+}
+
+run{
+	standardInput = System.in
+}
+
+task wrapper(type: Wrapper) {
+	description = 'Generates gradlew[.bat] scripts'
+	gradleVersion = '1.3'
+}
+
