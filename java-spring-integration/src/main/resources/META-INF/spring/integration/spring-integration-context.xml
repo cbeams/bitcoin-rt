@@ -27,14 +27,7 @@
 
 	<bean id="broker" class="org.bitcoinrt.server.ConnectionBroker"/>
 
-	<int-ip:tcp-inbound-channel-adapter  connection-factory="ws" channel="subscriptionChannel" />
-	<int-ip:tcp-outbound-channel-adapter connection-factory="ws" channel="toBrowser" />
-
-	<int:channel id="toBrowser">
-		<int:interceptors>
-			<int:wire-tap channel="loggit"/>
-		</int:interceptors>
-	</int:channel>
+	<int-ip:tcp-inbound-channel-adapter  id="tcpInbound"  connection-factory="ws" channel="subscriptionChannel" />
 
 	<int:channel id="subscriptionChannel">
 		<int:interceptors>
@@ -42,13 +35,22 @@
 		</int:interceptors>
 	</int:channel>
 
-	<int:service-activator ref="broker" method="subscribe" input-channel="subscriptionChannel"/>
+	<int:channel id="toBrowser">
+		<int:interceptors>
+			<int:wire-tap channel="loggit"/>
+		</int:interceptors>
+	</int:channel>
+
+	<int:service-activator id="subscribe" ref="broker" method="subscribe" input-channel="subscriptionChannel"/>
 
 	<int:logging-channel-adapter id="loggit" log-full-message="true"/>
 
 	<int:channel id="brokerChannel"/>
 
-	<int:splitter input-channel="brokerChannel" output-channel="toBrowser" ref="broker" method="createBroadCastMessages"/>
+	<int:splitter id="createBroadCastMessages" ref="broker" method="createBroadCastMessages"
+		input-channel="brokerChannel" output-channel="toBrowser"/>
+
+	<int-ip:tcp-outbound-channel-adapter id="tcpOutbound" connection-factory="ws" channel="toBrowser" />
 
 	<beans profile="default">
 	 	<bean class="org.bitcoinrt.client.AsyncHttpClientMtgoxClient">

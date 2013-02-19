@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2012 the original author or authors.
+ * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ public class BitcointWebAppInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
 		AnnotationConfigWebApplicationContext webAppContext = new AnnotationConfigWebApplicationContext();
-        webAppContext.register(WebConfig.class);
+		webAppContext.register(WebConfig.class);
 
-        final DispatcherServlet dispatcherServlet = new DispatcherServlet(webAppContext);
+		final DispatcherServlet dispatcherServlet = new DispatcherServlet(webAppContext);
 
 		@SuppressWarnings("serial")
 		MeteorServlet meteorServlet = new MeteorServlet() {

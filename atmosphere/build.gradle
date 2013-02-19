@@ -10,6 +10,11 @@ repositories {
 }
 
 eclipse {
+	classpath {
+		downloadSources = true
+		downloadJavadoc = true
+	}
+
   project {
     name = 'bitcoin-atmosphere'
   }
@@ -22,7 +27,7 @@ dependencies {
 	compile('com.jayway.jsonpath:json-path:0.8.1')
 	compile('com.ning:async-http-client:1.7.4')
 	compile('org.springframework:spring-webmvc:3.1.2.RELEASE')
-	compile('org.atmosphere:atmosphere-runtime:1.0.0')
+	compile('org.atmosphere:atmosphere-runtime:1.0.9')
 	compile('cglib:cglib:2.2.2')
 
 	compile('javax.servlet:jstl:1.2')
@@ -43,5 +48,5 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts'
-    gradleVersion = '1.2'
+    gradleVersion = '1.4'
 }

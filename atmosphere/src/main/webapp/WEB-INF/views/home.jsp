@@ -202,6 +202,7 @@
 				$.mynamespace.bitcoinChart = BitcoinChart();
 				$.mynamespace.bitcoinChart.start();
 				$("#control").removeClass("disabled");
+
 			});
 		</script>
 	</body>
