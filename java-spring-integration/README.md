@@ -5,7 +5,7 @@ trade messages from MtGox; the only transaction data coming through at the momen
 
 ### Running the sample
 
-	$ gradle run
+	$ ./gradlew run
 
 Once running, please open in your web browser:
 

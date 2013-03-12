@@ -119,6 +119,7 @@ public final class Main {
 			LOGGER.info("Exiting application...bye.");
 		}
 
+		context.close();
 		System.exit(0);
 
 	}

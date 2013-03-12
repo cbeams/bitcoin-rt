@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2012 the original author or authors.
+ * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,33 +19,32 @@ package org.bitcoinrt.client;
 import java.io.IOException;
 import java.net.URI;
 
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketListener;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.springframework.integration.MessageChannel;
 
 /**
- * Jetty WebSocket client implementation.
+ * Jetty 9 WebSocket client implementation.
  *
- * @see http://webtide.intalio.com/2011/09/jetty-websocket-client-api-updated/
- * @see http://download.eclipse.org/jetty/stable-7/apidocs/org/eclipse/jetty/websocket/WebSocketClient.html
+ * @see http://webtide.intalio.com/2012/10/jetty-9-updated-websocket-api/
+ * @see http://download.eclipse.org/jetty/9.0.0.v20130308/apidocs/org/eclipse/jetty/websocket/client/WebSocketClient.html
  */
 public class JettyMtgoxClient extends AbstractMtgoxClient {
 
-	private final WebSocketClientFactory factory;
-
+	private final WebSocketClient webSocketClient;
 
 	public JettyMtgoxClient(MessageChannel outputChannel) {
 		super(outputChannel);
-		this.factory = new WebSocketClientFactory();
+		this.webSocketClient = new WebSocketClient();
 	}
 
 	@Override
 	public void start() {
 		try {
-			this.factory.start();
-			WebSocketClient client = this.factory.newWebSocketClient();
-			client.open(new URI(MTGOX_URL), new MtgoxWebSocket());
+			webSocketClient.setConnectTimeout(10000);
+			webSocketClient.start();
+			webSocketClient.connect(new MtgoxWebSocket(), new URI(MTGOX_URL));
 		}
 		catch (Exception ex) {
 			logger.error("Failed to start WebSocketClientFactory", ex);
@@ -55,8 +54,8 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 	@Override
 	public void stop() {
 		try {
-			if (this.factory != null) {
-				this.factory.stop();
+			if (this.webSocketClient != null) {
+				this.webSocketClient.stop();
 			}
 		}
 		catch (Exception ex) {
@@ -64,15 +63,26 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 		}
 	}
 
-	private class MtgoxWebSocket implements WebSocket.OnTextMessage {
+	private class MtgoxWebSocket implements WebSocketListener {
 
 		@Override
-		public void onOpen(Connection conn) {
+		public void onWebSocketBinary(byte[] payload, int offset, int len) {
+			throw new IllegalStateException("Not implemented.");
+		}
+
+		@Override
+		public void onWebSocketClose(int statusCode, String reason) {
+			String log = "Disconnected from {} with closeCode={} and message={}";
+			logger.debug(log, new Object[] {MTGOX_URL, statusCode, reason});
+		}
+
+		@Override
+		public void onWebSocketConnect(Session session) {
 			logger.debug("Connected to {}", MTGOX_URL);
 			logger.debug("Unsubscribing...");
 			try {
-				conn.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
-				conn.sendMessage("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
+				session.getRemote().sendString("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_TICKER_CHANNEL + "\"}");
+				session.getRemote().sendString("{\"op\":\"unsubscribe\",\"channel\":\"" + MTGOX_DEPTH_CHANNEL + "\"}");
 			}
 			catch (IOException ex) {
 				logger.error("Unsubscribe failed", ex);
@@ -81,15 +91,14 @@ public class JettyMtgoxClient extends AbstractMtgoxClient {
 		}
 
 		@Override
-		public void onMessage(String message) {
-			// Delegate to the parent
-			onMessage(message);
+		public void onWebSocketError(Throwable cause) {
+			throw new IllegalStateException(cause);
 		}
 
 		@Override
-		public void onClose(int closeCode, String message) {
-			String log = "Disconnected from {} with closeCode={} and message={}";
-			logger.debug(log, new Object[] {MTGOX_URL, closeCode, message});
+		public void onWebSocketText(String message) {
+			// Delegate to the parent
+			onMessage(message);
 		}
 	}
 }
