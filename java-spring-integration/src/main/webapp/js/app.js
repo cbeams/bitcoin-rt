@@ -10,7 +10,6 @@
 
 		socket.onopen = function(event) {
 			ready = true;
-			socket.send("Client Ready");
 		};
 
 		socket.onmessage = function(event) {

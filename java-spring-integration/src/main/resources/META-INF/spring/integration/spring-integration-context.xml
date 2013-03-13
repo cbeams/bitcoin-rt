@@ -27,21 +27,13 @@
 
 	<bean id="broker" class="org.bitcoinrt.server.ConnectionBroker"/>
 
-	<int-ip:tcp-inbound-channel-adapter  id="tcpInbound"  connection-factory="ws" channel="subscriptionChannel" />
-
-	<int:channel id="subscriptionChannel">
-		<int:interceptors>
-			<int:wire-tap channel="loggit"/>
-		</int:interceptors>
-	</int:channel>
+	<int-ip:tcp-inbound-channel-adapter id="tcpInbound"  connection-factory="ws" channel="loggit" />
 
 	<int:channel id="toBrowser">
 		<int:interceptors>
 			<int:wire-tap channel="loggit"/>
 		</int:interceptors>
 	</int:channel>
-
-	<int:service-activator id="subscribe" ref="broker" method="subscribe" input-channel="subscriptionChannel"/>
 
 	<int:logging-channel-adapter id="loggit" log-full-message="true"/>
 
