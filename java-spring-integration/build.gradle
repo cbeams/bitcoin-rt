@@ -4,8 +4,8 @@ apply plugin: 'application'
 
 mainClassName = 'org.bitcoinrt.Main'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
 	maven { url 'http://repo.springsource.org/libs-snapshot' }
