@@ -10,9 +10,13 @@ repositories {
 }
 
 eclipse {
-  project {
-    name = 'bitcoin-java-servlet'
-  }
+	classpath {
+		downloadSources = true
+		downloadJavadoc = true
+	}
+	project {
+		name = 'bitcoin-java-servlet'
+	}
 }
 
 war.baseName = 'bitcoin-java-servlet'
@@ -24,9 +28,9 @@ dependencies {
 	compile('org.eclipse.jetty:jetty-websocket:8.1.4.v20120524')
 	compile('org.springframework:spring-web:3.1.1.RELEASE')
 
-	providedCompile('org.apache.tomcat:tomcat-catalina:7.0.30')
-	providedCompile('org.apache.tomcat:tomcat-coyote:7.0.30')
-	providedCompile('org.apache.tomcat:tomcat-servlet-api:7.0.30')
+	providedCompile('org.apache.tomcat:tomcat-catalina:7.0.35')
+	providedCompile('org.apache.tomcat:tomcat-coyote:7.0.35')
+	providedCompile('org.apache.tomcat:tomcat-servlet-api:7.0.35')
 
 	runtime('ch.qos.logback:logback-classic:1.0.1')
 	runtime('org.slf4j:jcl-over-slf4j:1.6.4')
@@ -34,6 +38,6 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     description = 'Generates gradlew[.bat] scripts'
-    gradleVersion = '1.3'
+    gradleVersion = '1.6'
 }
 
