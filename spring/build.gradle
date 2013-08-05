@@ -1,0 +1,56 @@
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+	maven { url 'http://repo.springsource.org/libs-milestone' }
+	mavenCentral()
+}
+
+eclipse {
+	classpath {
+		downloadSources = true
+		downloadJavadoc = true
+	}
+
+  project {
+    name = 'bitcoin-spring'
+  }
+}
+
+war.baseName = 'bitcoin-spring'
+
+dependencies {
+
+	compile('com.jayway.jsonpath:json-path:0.8.1')
+	compile('org.springframework:spring-webmvc:4.0.0.M2')
+	compile('org.springframework:spring-websocket:4.0.0.M2')
+	compile('com.fasterxml.jackson.core:jackson-databind:2.2.1')
+
+	testCompile('org.springframework:spring-test:4.0.0.M2')
+
+
+	compile('org.glassfish.tyrus:tyrus-client:1.1')
+	compile('org.glassfish.tyrus:tyrus-container-grizzly:1.1')
+
+	compile('javax.servlet:jstl:1.2')
+	compile('org.glassfish.web:jstl-impl:1.2') {
+		exclude group: 'javax.servlet', module: 'servlet-api'
+		exclude group: 'javax.servlet.jsp', module: 'jsp-api'
+		exclude group: 'javax.servlet.jsp.jstl', module: 'jstl-api'
+	}
+
+	providedCompile('javax.servlet:javax.servlet-api:3.0.1')
+	providedCompile('javax.servlet.jsp:jsp-api:2.1')
+
+	compile('ch.qos.logback:logback-classic:1.0.1')
+	compile('org.slf4j:jcl-over-slf4j:1.6.4')
+	testCompile('junit:junit:4.11')
+}
+
+task wrapper(type: Wrapper) {
+    description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '1.6'
+}
