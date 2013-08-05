@@ -20,10 +20,8 @@ import org.bitcoinrt.spring.websocket.client.ClientMtgoxWebSocketHandler;
 import org.bitcoinrt.spring.websocket.client.CustomWebSocketConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.endpoint.StandardWebSocketClient;
 

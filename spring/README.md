@@ -5,11 +5,27 @@ An implementation backed by the [Spring 4.0 Websocket][] and [SockJS][] support.
 The only transaction data coming through at the moment are trades from the
 [MtGox] Bitcoin exchange.
 
-# Running the Sample
+# Building and Running the Sample
 
 The sample uses [Gradle][] to build the project.
 
-1. Build the application: `./gradlew clean war`
+Ideally you want to deploy this sample against Servlet containers that support **JSR-356**, such as the forthcoming *Tomcat 8*. Nevertheless,
+you can also deploy the sample to slightly older containers such as *Tomcat 7*. In that case *SockJS* will fallback to either Streaming or Long-Polling.
+
+## Build the Sample
+
+### For Containers Supporting JSR-356
+
+`./gradlew clean build`
+
+### For older Containers NOT Supporting JSR-356
+
+`./gradlew clean build -PnoJSR356`
+
+This will include the *Tyrus* libraries to the War.
+
+## Run the Sample
+
 2. Copy the war file from `build/libs` to e.g. Tomcat's webapps folder
 3. Start your container
 4. Open your browser: `http://localhost:8080/bitcoin-spring/`

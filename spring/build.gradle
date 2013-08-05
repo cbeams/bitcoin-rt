@@ -5,7 +5,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-	maven { url 'http://repo.springsource.org/libs-milestone' }
+	maven { url 'http://repo.springsource.org/libs-snapshot' }
 	mavenCentral()
 }
 
@@ -25,15 +25,20 @@ war.baseName = 'bitcoin-spring'
 dependencies {
 
 	compile('com.jayway.jsonpath:json-path:0.8.1')
-	compile('org.springframework:spring-webmvc:4.0.0.M2')
-	compile('org.springframework:spring-websocket:4.0.0.M2')
+	compile('org.springframework:spring-webmvc:4.0.0.BUILD-SNAPSHOT')
+	compile('org.springframework:spring-websocket:4.0.0.BUILD-SNAPSHOT')
 	compile('com.fasterxml.jackson.core:jackson-databind:2.2.1')
 
-	testCompile('org.springframework:spring-test:4.0.0.M2')
+	testCompile('org.springframework:spring-test:4.0.0.BUILD-SNAPSHOT')
 
-
-	compile('org.glassfish.tyrus:tyrus-client:1.1')
-	compile('org.glassfish.tyrus:tyrus-container-grizzly:1.1')
+	if (rootProject.hasProperty('noJSR356')) {
+		compile('org.glassfish.tyrus:tyrus-client:1.1')
+		compile('org.glassfish.tyrus:tyrus-container-grizzly:1.1')
+	}
+	else {
+		testCompile('org.glassfish.tyrus:tyrus-client:1.1')
+		testCompile('org.glassfish.tyrus:tyrus-container-grizzly:1.1')
+	}
 
 	compile('javax.servlet:jstl:1.2')
 	compile('org.glassfish.web:jstl-impl:1.2') {
@@ -42,15 +47,15 @@ dependencies {
 		exclude group: 'javax.servlet.jsp.jstl', module: 'jstl-api'
 	}
 
-	providedCompile('javax.servlet:javax.servlet-api:3.0.1')
+	providedCompile('javax.servlet:javax.servlet-api:3.1.0')
 	providedCompile('javax.servlet.jsp:jsp-api:2.1')
 
-	compile('ch.qos.logback:logback-classic:1.0.1')
-	compile('org.slf4j:jcl-over-slf4j:1.6.4')
+	compile('ch.qos.logback:logback-classic:1.0.13')
+	compile('org.slf4j:jcl-over-slf4j:1.7.5')
 	testCompile('junit:junit:4.11')
 }
 
 task wrapper(type: Wrapper) {
-    description = 'Generates gradlew[.bat] scripts'
-    gradleVersion = '1.6'
+	description = 'Generates gradlew[.bat] scripts'
+	gradleVersion = '1.6'
 }

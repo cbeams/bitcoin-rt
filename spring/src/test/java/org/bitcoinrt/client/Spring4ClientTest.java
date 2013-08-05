@@ -39,6 +39,6 @@ public class Spring4ClientTest {
 	@Test
 	public void test() throws IOException, InterruptedException {
 		connectionManager.start();
-		Thread.sleep(100000);
+		Thread.sleep(5000);
 	}
 }
