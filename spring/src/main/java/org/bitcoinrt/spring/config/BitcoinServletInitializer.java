@@ -23,18 +23,19 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-public class BitcointWebAppInitializer implements WebApplicationInitializer {
+
+public class BitcoinServletInitializer implements WebApplicationInitializer {
 
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
-		final AnnotationConfigWebApplicationContext webAppContext = new AnnotationConfigWebApplicationContext();
-		webAppContext.register(WebConfig.class);
+		AnnotationConfigWebApplicationContext cxt = new AnnotationConfigWebApplicationContext();
+		cxt.register(ServerConfig.class);
 
-		final ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(webAppContext));
-			dispatcher.setLoadOnStartup(1);
-			dispatcher.setAsyncSupported(true);
-			dispatcher.addMapping("/");
-
+		DispatcherServlet servlet = new DispatcherServlet(cxt);
+		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("main", servlet);
+		dispatcher.setLoadOnStartup(1);
+		dispatcher.setAsyncSupported(true);
+		dispatcher.addMapping("/");
 	}
 
 }

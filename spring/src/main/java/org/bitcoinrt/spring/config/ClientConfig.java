@@ -15,14 +15,14 @@
  */
 package org.bitcoinrt.spring.config;
 
-import org.bitcoinrt.spring.common.WebSocketSessionsStore;
-import org.bitcoinrt.spring.websocket.client.ClientMtgoxWebSocketHandler;
-import org.bitcoinrt.spring.websocket.client.CustomWebSocketConnectionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.bitcoinrt.spring.websocket.ClientMtgoxWebSocketHandler;
+import org.bitcoinrt.spring.websocket.WebSocketSessionsStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.endpoint.StandardWebSocketClient;
 
 /**
@@ -32,25 +32,31 @@ import org.springframework.web.socket.client.endpoint.StandardWebSocketClient;
  *
  */
 @Configuration
-public class ClientWebSocketConfig {
+public class ClientConfig {
 
-	private static final Logger logger = LoggerFactory.getLogger(ClientWebSocketConfig.class);
+	private static final String WS_URL = "ws://websocket.mtgox.com:80/mtgox";
+
 
 	@Bean
-	public ClientMtgoxWebSocketHandler clientWebSocketHandler() {
-		return new ClientMtgoxWebSocketHandler();
+	public WebSocketConnectionManager connectionManager() {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setOrigin("http://websocket.mtgox.com");
+
+		WebSocketConnectionManager cm = new WebSocketConnectionManager(wsClient(), wsHandler(), WS_URL);
+		cm.setHeaders(headers);
+		cm.setAutoStartup(true);
+		return cm;
 	}
 
 	@Bean
-	public WebSocketClient webSocketClient() {
+	public WebSocketClient wsClient() {
 		return new StandardWebSocketClient();
 	}
 
 	@Bean
-	public CustomWebSocketConnectionManager connectionManager() {
-		CustomWebSocketConnectionManager cm = new CustomWebSocketConnectionManager(webSocketClient(), clientWebSocketHandler(), "ws://websocket.mtgox.com:80/mtgox");
-		cm.setAutoStartup(true);
-		return cm;
+	public WebSocketHandler wsHandler() {
+		return new ClientMtgoxWebSocketHandler();
 	}
 
 	@Bean

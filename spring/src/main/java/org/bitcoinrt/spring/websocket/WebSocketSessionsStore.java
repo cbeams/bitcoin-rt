@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.bitcoinrt.spring.common;
+package org.bitcoinrt.spring.websocket;
 
 import java.io.IOException;
 import java.util.Map;

@@ -1,6 +1,5 @@
-package org.bitcoinrt.spring.websocket.server;
+package org.bitcoinrt.spring.websocket;
 
-import org.bitcoinrt.spring.common.WebSocketSessionsStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

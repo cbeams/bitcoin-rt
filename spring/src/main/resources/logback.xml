@@ -23,16 +23,12 @@
 		<level value="INFO" />
 	</logger>
 
-
 	<logger name="org.apache">
-		<level value="INFO" />
-	</logger>
-	<logger name="org.eclipse.jetty">
 		<level value="INFO" />
 	</logger>
 
 	<logger name="org.springframework.web.socket">
-		<level value="INFO" />
+		<level value="DEBUG" />
 	</logger>
 
 	<root>

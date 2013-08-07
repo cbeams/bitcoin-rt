@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bitcoinrt.spring.websocket.server.ServerWebSocketHandler;
+import org.bitcoinrt.spring.websocket.ServerWebSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -38,8 +38,8 @@ import org.springframework.web.socket.sockjs.transport.handler.DefaultSockJsServ
 @Configuration
 @ComponentScan(basePackages="org.bitcoinrt.spring.controller")
 @EnableWebMvc
-@Import(ClientWebSocketConfig.class)
-public class WebConfig extends WebMvcConfigurerAdapter {
+@Import(ClientConfig.class)
+public class ServerConfig extends WebMvcConfigurerAdapter {
 
 
 	@Override

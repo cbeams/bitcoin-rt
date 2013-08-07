@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.bitcoinrt.spring.websocket.client;
+package org.bitcoinrt.spring.websocket;
 
 import net.minidev.json.JSONObject;
 
-import org.bitcoinrt.spring.common.WebSocketSessionsStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +45,6 @@ public class ClientMtgoxWebSocketHandler extends TextWebSocketHandlerAdapter {
 	@Autowired
 	WebSocketSessionsStore serverWebSocketSessionsStore;
 
-	@Autowired
-	CustomWebSocketConnectionManager cm;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -95,18 +92,14 @@ public class ClientMtgoxWebSocketHandler extends TextWebSocketHandlerAdapter {
 	public void afterConnectionClosed(WebSocketSession session,
 			CloseStatus status) throws Exception {
 		logger.debug("Disconnected from {}", MTGOX_URL);
-		cm.openConnection();
 		super.afterConnectionClosed(session, status);
-
 	}
 
 	@Override
 	public void handleTransportError(WebSocketSession session,
 			Throwable exception) throws Exception {
 		logger.error("Error from {}: {}", MTGOX_URL, exception.getMessage());
-		cm.openConnection();
 		super.handleTransportError(session, exception);
-
 	}
 
 }

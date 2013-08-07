@@ -17,7 +17,7 @@ package org.bitcoinrt.client;
 
 import java.io.IOException;
 
-import org.bitcoinrt.spring.config.ClientWebSocketConfig;
+import org.bitcoinrt.spring.config.ClientConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import org.springframework.web.socket.client.ConnectionManagerSupport;
  * @author Gunnar Hillert
  *
  */
-@ContextConfiguration(classes={ClientWebSocketConfig.class})
+@ContextConfiguration(classes={ClientConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class Spring4ClientTest {
 
